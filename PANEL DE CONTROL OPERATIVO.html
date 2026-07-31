@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Control Operativo - Articulación SENA 2026</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        sena: {
+                            50: '#f0fdf2',
+                            100: '#dcfce5',
+                            500: '#39A900', // SENA Official Green
+                            600: '#2e8800',
+                            700: '#236900',
+                            800: '#1c5202',
+                            900: '#174305',
+                        },
+                        navy: {
+                            800: '#0f172a',
+                            900: '#090d16',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.05);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(57, 169, 0, 0.4);
+            border-radius: 9999px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(57, 169, 0, 0.7);
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+        }
+        .dark .glass-panel {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 font-sans min-h-full transition-colors duration-200 custom-scrollbar">
+
+    <div id="app" class="min-h-screen flex flex-col">
+        
+        <!-- Header Nav -->
+        <header class="sticky top-0 z-30 border-b border-slate-200 dark:border-slate-800 glass-panel shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                    
+                    <!-- Branding -->
+                    <div class="flex items-center space-x-3 w-full md:w-auto justify-between md:justify-start">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sena-600 to-sena-500 flex items-center justify-center text-white shadow-md shadow-sena-500/20">
+                                <i class="fa-solid fa-sitemap text-xl"></i>
+                            </div>
+                            <div>
+                                <h1 class="text-lg font-bold tracking-tight leading-none text-slate-900 dark:text-white flex items-center gap-2">
+                                    <span>PANEL DE CONTROL OPERATIVO</span>
+                                    <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-sena-100 dark:bg-sena-900/60 text-sena-700 dark:text-sena-400 border border-sena-500/30">2026</span>
+                                </h1>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Articulación SENA • Matriz General de Procesos & Trazabilidad</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Theme Toggle (Mobile) -->
+                        <button id="themeToggleMobile" class="md:hidden p-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800">
+                            <i class="fa-solid fa-moon dark:hidden text-lg"></i>
+                            <i class="fa-solid fa-sun hidden dark:block text-amber-400 text-lg"></i>
+                        </button>
+                    </div>
+
+                    <!-- Action Bar -->
+                    <div class="flex items-center space-x-2.5 w-full md:w-auto justify-end">
+                        <button onclick="openAdminAuthModal()" class="inline-flex items-center px-3.5 py-2 rounded-xl text-xs font-medium bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition shadow-sm">
+                            <i class="fa-solid fa-lock text-sena-500 mr-2"></i>
+                            Gestión Admin
+                        </button>
+                        <button id="themeToggle" class="hidden md:flex p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                            <i class="fa-solid fa-moon dark:hidden text-base"></i>
+                            <i class="fa-solid fa-sun hidden dark:block text-amber-400 text-base"></i>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+            <!-- Search and Filter Tools -->
+            <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+                
+                <!-- Search Input -->
+                <div class="relative w-full md:w-96">
+                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                    <input type="text" id="searchInput" placeholder="Buscar por módulo, código, proceso o palabra clave..." class="w-full pl-10 pr-4 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-sena-500 transition">
+                </div>
+
+                <!-- Filters -->
+                <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+                    <span class="text-xs font-medium text-slate-400 mr-1 hidden sm:inline"><i class="fa-solid fa-filter mr-1"></i> Grado:</span>
+                    <button onclick="setGradeFilter('all')" class="grade-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-sena-500 text-white shadow-sm" data-grade="all">
+                        Todos
+                    </button>
+                    <button onclick="setGradeFilter('Grado 10')" class="grade-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition" data-grade="Grado 10">
+                        Grado 10
+                    </button>
+                    <button onclick="setGradeFilter('Grado 11')" class="grade-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition" data-grade="Grado 11">
+                        Grado 11
+                    </button>
+                    
+                    <div class="h-4 w-px bg-slate-200 dark:bg-slate-800 mx-1"></div>
+
+                    <!-- Layout Toggle Controls -->
+                    <div class="flex items-center bg-slate-100 dark:bg-slate-800 p-1 rounded-lg space-x-1">
+                        <button onclick="setViewMode('cards')" id="viewCardsBtn" class="p-1.5 rounded-md text-sena-600 dark:text-sena-400 bg-white dark:bg-slate-900 shadow-sm" title="Vista en Tarjetas">
+                            <i class="fa-solid fa-grip text-xs"></i>
+                        </button>
+                        <button onclick="setViewMode('table')" id="viewTableBtn" class="p-1.5 rounded-md text-slate-400 hover:text-slate-600 dark:hover:text-slate-200" title="Vista Matriz / Tabla">
+                            <i class="fa-solid fa-list text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Modules Container -->
+            <div id="modulesContainer" class="space-y-6">
+                <!-- Dynamically populated via JS -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="hidden text-center py-12 px-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800">
+                <i class="fa-solid fa-folder-open text-4xl text-slate-300 dark:text-slate-600 mb-3"></i>
+                <h3 class="text-base font-semibold text-slate-800 dark:text-slate-200">No se encontraron procesos</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Prueba ajustando el término de búsqueda o cambiando el filtro de grado.</p>
+                <button onclick="resetFilters()" class="mt-4 px-4 py-2 rounded-xl text-xs font-medium bg-sena-500 text-white hover:bg-sena-600 transition">
+                    Restablecer Filtros
+                </button>
+            </div>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="mt-auto border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-6">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400">
+                    <span class="font-semibold text-sena-600 dark:text-sena-400">SENA Articulación con la Educación Media</span>
+                    <span>•</span>
+                    <span>Vigencia Operativa 2026</span>
+                </div>
+                <div class="text-xs text-slate-400 dark:text-slate-500">
+                    Control Documental y Trazabilidad Digital • Versión 4.0
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- Modal: Detail / Checklist Viewer -->
+    <div id="detailModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-2xl w-full p-6 shadow-2xl space-y-5 my-8">
+            <div class="flex items-start justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
+                <div class="flex items-center space-x-3">
+                    <div id="modalIconContainer" class="w-10 h-10 rounded-xl bg-sena-100 dark:bg-sena-950 text-sena-600 dark:text-sena-400 flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-list"></i>
+                    </div>
+                    <div>
+                        <span id="modalCodeBadge" class="text-xs font-bold text-sena-600 dark:text-sena-400 bg-sena-50 dark:bg-sena-950/60 px-2 py-0.5 rounded-full border border-sena-500/20">1.0</span>
+                        <h3 id="modalTitle" class="text-lg font-bold text-slate-900 dark:text-white mt-0.5">Título del Proceso</h3>
+                    </div>
+                </div>
+                <button onclick="closeModal('detailModal')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <div id="modalBody" class="space-y-4">
+                <!-- Content inserted via JS -->
+            </div>
+
+            <div class="flex items-center justify-end border-t border-slate-100 dark:border-slate-800 pt-4">
+                <button onclick="closeModal('detailModal')" class="px-4 py-2 rounded-xl text-xs font-medium bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Admin Password Verification -->
+    <div id="adminAuthModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4">
+            <div class="flex items-center space-x-3 border-b border-slate-100 dark:border-slate-800 pb-3">
+                <div class="w-10 h-10 rounded-xl bg-sena-100 dark:bg-sena-950 text-sena-600 dark:text-sena-400 flex items-center justify-center text-lg shrink-0">
+                    <i class="fa-solid fa-user-shield"></i>
+                </div>
+                <div>
+                    <h3 class="text-sm font-bold text-slate-900 dark:text-white">Acceso Restringido</h3>
+                    <p class="text-[11px] text-slate-500 dark:text-slate-400">Edición de enlaces operativos</p>
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <label class="block text-xs font-medium text-slate-700 dark:text-slate-300">Contraseña de Administrador:</label>
+                <input type="password" id="adminPasswordInput" placeholder="Ingrese contraseña..." class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-sena-500 outline-none">
+                <p id="adminAuthError" class="text-[11px] text-rose-500 hidden font-medium">Contraseña incorrecta. Intente nuevamente.</p>
+            </div>
+
+            <div class="flex items-center justify-end space-x-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+                <button onclick="closeModal('adminAuthModal')" class="px-3 py-1.5 rounded-lg text-xs font-medium border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300">
+                    Cancelar
+                </button>
+                <button onclick="verifyAdminPassword()" class="px-4 py-1.5 rounded-lg text-xs font-medium bg-sena-500 text-white hover:bg-sena-600 transition">
+                    Ingresar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Link Customizer -->
+    <div id="linkConfigModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-xl w-full p-6 shadow-2xl space-y-4 my-8">
+            <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-link text-sena-500 text-lg"></i>
+                    <h3 class="text-base font-bold text-slate-900 dark:text-white">Configuración de Enlaces Personalizados</h3>
+                </div>
+                <button onclick="closeModal('linkConfigModal')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Cloud Sync Indicator -->
+            <div class="flex items-center justify-between px-3 py-2 rounded-xl bg-sena-50 dark:bg-sena-950/60 border border-sena-500/30 text-xs text-sena-700 dark:text-sena-300">
+                <div class="flex items-center space-x-2">
+                    <span class="relative flex h-2.5 w-2.5">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sena-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-sena-500"></span>
+                    </span>
+                    <span class="font-medium" id="cloudSyncStatus">Sincronización en la Nube Activa</span>
+                </div>
+                <span class="text-[10px] font-semibold text-slate-500 dark:text-slate-400">Visible para todos los usuarios</span>
+            </div>
+
+            <p class="text-xs text-slate-500 dark:text-slate-400">
+                Puedes vincular las URLs reales de tus carpetas de Google Drive y hojas de Google Sheets. Los cambios guardados se reflejarán instantáneamente en todos los dispositivos.
+            </p>
+
+            <div id="linkInputsContainer" class="space-y-3 max-h-[50vh] overflow-y-auto custom-scrollbar pr-1">
+                <!-- JS populated link inputs -->
+            </div>
+
+            <div class="flex items-center justify-between border-t border-slate-100 dark:border-slate-800 pt-4">
+                <button onclick="resetCustomLinks()" class="px-3 py-1.5 rounded-lg text-xs font-medium text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition">
+                    Restablecer Predeterminados
+                </button>
+                <div class="flex space-x-2">
+                    <button onclick="closeModal('linkConfigModal')" class="px-4 py-2 rounded-xl text-xs font-medium border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300">
+                        Cancelar
+                    </button>
+                    <button onclick="saveCustomLinks()" class="px-4 py-2 rounded-xl text-xs font-medium bg-sena-500 text-white hover:bg-sena-600 transition">
+                        Guardar Enlaces en Nube
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global Firebase Configuration & Environment Setup
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'sena-panel-2026';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+            apiKey: "demo-api-key",
+            authDomain: "demo-app.firebaseapp.com",
+            projectId: "demo-app",
+            storageBucket: "demo-app.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:123456789"
+        };
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentUser = null;
+
+        // Data Store for Sena Modules and Operational Sub-items
+        const modulesData = [
+            {
+                id: "mod-1",
+                code: "MÓDULO 1",
+                title: "GESTIÓN DOCUMENTAL Y TABLAS DE RETENCIÓN (TRD)",
+                icon: "fa-folder-tree",
+                items: [
+                    {
+                        code: "1.0",
+                        name: "TRD - Vigencia 2025 (Grado 11)",
+                        grade: "Grado 11",
+                        process: "Proceso Gestión Documental – Hoja Control GD-F-003 Formato Hoja Control 2025 (Google Sheets)",
+                        platform: "Google Sheets",
+                        platformIcon: "fa-file-excel",
+                        platformColor: "emerald",
+                        linkKey: "trd2025",
+                        defaultLink: "https://docs.google.com/spreadsheets/",
+                        description: "Formato Oficial de Foliación Digital (V.04): Matriz en línea estructurada por pestañas independientes por cada ficha técnica. Garantiza el orden del expediente electrónico exigiendo obligatoriamente foliación exacta.",
+                        hasList: false
+                    },
+                    {
+                        code: "1.1",
+                        name: "TRD - Hoja Control (Grado 10)",
+                        grade: "Grado 10",
+                        process: "Proceso Gestión Documental – Hoja Control GD-F-003 Formato Hoja Control 2026 (Google Sheets)",
+                        platform: "Google Sheets",
+                        platformIcon: "fa-file-excel",
+                        platformColor: "emerald",
+                        linkKey: "trd2026_hoja",
+                        defaultLink: "https://docs.google.com/spreadsheets/",
+                        description: "Formato Oficial de Foliación Digital (V.04): Matriz en línea estructurada por pestañas independientes por cada ficha técnica. Garantiza el orden del expediente electrónico.",
+                        hasList: false
+                    },
+                    {
+                        code: "2.0",
+                        name: "TRD - Vigencia 2026 (Grado 10)",
+                        grade: "Grado 10",
+                        process: "Historias Académicas (Google Drive)",
+                        platform: "Google Drive",
+                        platformIcon: "fa-folder-open",
+                        platformColor: "blue",
+                        linkKey: "historias_drive",
+                        defaultLink: "https://drive.google.com/",
+                        description: "Expediente Digital de Matrícula: Compilación obligatoria e individual de los soportes legales escaneados en formato PDF legible por cada aprendiz matriculado. Comprende los 7 documentos de orden obligatorio.",
+                        hasList: true,
+                        listType: "matricula_docs",
+                        listTitle: "Documentos Obligatorios del Expediente Digital de Matrícula",
+                        listItems: [
+                            "01. Registro Sistema matrícula",
+                            "02. Documento Identidad",
+                            "03. Acta de Compromiso del Aprendiz",
+                            "04. Tratamiento de datos del menor de edad - Registro civil",
+                            "05. Documento Padre o Acudiente",
+                            "06. Certificación afiliación EPS",
+                            "07. Registro Asistencia Matrícula"
+                        ]
+                    },
+                    {
+                        code: "2.1",
+                        name: "TRD - Control 2026 (Grado 10)",
+                        grade: "Grado 10",
+                        process: "Control Historias Académicas (Google Sheets)",
+                        platform: "Google Sheets",
+                        platformIcon: "fa-table-columns",
+                        platformColor: "emerald",
+                        linkKey: "control_historias",
+                        defaultLink: "https://docs.google.com/spreadsheets/",
+                        description: "Panel Central de Control: Tablero dinámico y matriz de consolidación operativa que permite visualizar el estado de auditoría interna de los documentos de matrícula de grado décimo (actualización semanal). Funciona como semáforo de control.",
+                        hasList: false
+                    }
+                ]
+            },
+            {
+                id: "mod-2",
+                code: "MÓDULO 2",
+                title: "GESTIÓN PEDAGÓGICA (PORTAFOLIO INSTRUCTOR)",
+                icon: "fa-chalkboard-user",
+                items: [
+                    {
+                        code: "1.0",
+                        name: "Portafolio Instructor (Grados 10 y 11)",
+                        grade: "General",
+                        process: "Carpeta de Evidencias (Google Drive)",
+                        platform: "Google Drive",
+                        platformIcon: "fa-folder-open",
+                        platformColor: "blue",
+                        linkKey: "portafolio_drive",
+                        defaultLink: "https://drive.google.com/",
+                        description: "Portafolio Integral de Gestión Pedagógica: Repositorio obligatorio que custodia las quince (15) evidencias técnicas y pedagógicas requeridas para el desarrollo del plan curricular institucional por parte de los instructores asignados.",
+                        hasList: true,
+                        listType: "portafolio_evidencias",
+                        listTitle: "15 Evidencias Técinico-Pedagógicas del Portafolio",
+                        listItems: [
+                            "01. Programa formativo",
+                            "02. Proyecto formativo",
+                            "03. Viabilidad del proyecto",
+                            "04. Planeación pedagógica",
+                            "05. Verificación ambiente",
+                            "06. Guías e instrumentos",
+                            "07. Cierre inducción",
+                            "08. Plan de trabajo concertado",
+                            "09. Registro inasistencia / asistencia",
+                            "10. Plan mejoramiento",
+                            "11. Acta finalización lectiva",
+                            "12. Reporte juicios evaluativos",
+                            "13. Seguimiento etapa productiva",
+                            "14. Evaluación desarrollo proyecto",
+                            "15. Portafolio aprendices"
+                        ]
+                    },
+                    {
+                        code: "1.1",
+                        name: "Portafolio – Control (Grado 10 - Grado 11)",
+                        grade: "General",
+                        process: "Verificación Portafolios 2026 (Google Sheets)",
+                        platform: "Google Sheets",
+                        platformIcon: "fa-chart-pie",
+                        platformColor: "emerald",
+                        linkKey: "control_portafolio",
+                        defaultLink: "https://docs.google.com/spreadsheets/",
+                        description: "Tablero Control Cuantitativo: Hoja de control oficial para supervisar el estado de carga de los portafolios de forma individual por ficha y consolidado general.",
+                        hasList: false
+                    }
+                ]
+            },
+            {
+                id: "mod-3",
+                code: "MÓDULO 3",
+                title: "CONTROL Y REGISTRO DE ASISTENCIA",
+                icon: "fa-clipboard-user",
+                items: [
+                    {
+                        code: "1.0",
+                        name: "Control de Asistencia (Grado 10 - Grado 11)",
+                        grade: "General",
+                        process: "Carpeta de Asistencia (Google Drive)",
+                        platform: "Google Drive",
+                        platformIcon: "fa-folder-open",
+                        platformColor: "blue",
+                        linkKey: "asistencia_drive",
+                        defaultLink: "https://drive.google.com/",
+                        description: "Control de Asistencia Unificado: Formato de asistencia unificado para grados 10 y 11. Se recomienda obligatoriamente imprimir y hacer firmar en físico en cada sesión de formación.",
+                        hasList: false
+                    }
+                ]
+            },
+            {
+                id: "mod-4",
+                code: "MÓDULO 4",
+                title: "SEGUIMIENTO A ETAPA PRODUCTIVA (EP)",
+                icon: "fa-briefcase",
+                items: [
+                    {
+                        code: "1.0",
+                        name: "Etapa Productiva 2026 (Grado 11)",
+                        grade: "Grado 11",
+                        process: "Soportes EP 2026 (Google Drive)",
+                        platform: "Google Drive",
+                        platformIcon: "fa-folder-open",
+                        platformColor: "blue",
+                        linkKey: "ep2026_drive",
+                        defaultLink: "https://drive.google.com/",
+                        description: "Repositorio documental oficial que centraliza los soportes de la Etapa Productiva 2026, organizados por programa de formación y aprendiz. Incluye formatos, documentos personales, certificaciones, bitácoras, evaluaciones y actas.",
+                        hasList: false
+                    },
+                    {
+                        code: "1.1",
+                        name: "Etapa Productiva – Control (Grado 11)",
+                        grade: "Grado 11",
+                        process: "Verificación EP 2026 (Google Sheets)",
+                        platform: "Google Sheets",
+                        platformIcon: "fa-list-check",
+                        platformColor: "emerald",
+                        linkKey: "ep2026_sheets",
+                        defaultLink: "https://docs.google.com/spreadsheets/",
+                        description: "Tablero de control y seguimiento de la Etapa Productiva 2026, que consolida en tiempo real el avance documental por ficha y aprendiz. Permite verificar porcentaje de cumplimiento y fechas de actualización.",
+                        hasList: false
+                    },
+                    {
+                        code: "2.0",
+                        name: "Etapa Productiva 2027 (Grado 10)",
+                        grade: "Grado 10",
+                        process: "Soportes EP 2027 (Google Drive)",
+                        platform: "Google Drive",
+                        platformIcon: "fa-folder-open",
+                        platformColor: "blue",
+                        linkKey: "ep2027_drive",
+                        defaultLink: "https://drive.google.com/",
+                        description: "Repositorio documental oficial que centraliza los soportes de la Etapa Productiva 2027, organizados por programa de formación y aprendiz para grado décimo.",
+                        hasList: false
+                    },
+                    {
+                        code: "2.1",
+                        name: "Etapa Productiva – Control (Grado 10)",
+                        grade: "Grado 10",
+                        process: "Verificación EP 2027 (Google Sheets)",
+                        platform: "Google Sheets",
+                        platformIcon: "fa-list-check",
+                        platformColor: "emerald",
+                        linkKey: "ep2027_sheets",
+                        defaultLink: "https://docs.google.com/spreadsheets/",
+                        description: "Tablero de control y seguimiento de la Etapa Productiva 2027, que consolida el avance documental proyectado por ficha y aprendiz.",
+                        hasList: false
+                    }
+                ]
+            },
+            {
+                id: "mod-5",
+                code: "MÓDULO 5",
+                title: "GOBERNANZA Y GESTIÓN DE ACTAS",
+                icon: "fa-gavel",
+                items: [
+                    {
+                        code: "1.0",
+                        name: "Gestión de Actas (Grado 10 - Grado 11)",
+                        grade: "General",
+                        process: "Carpeta Actas 2025-2026 (Google Drive)",
+                        platform: "Google Drive",
+                        platformIcon: "fa-folder-open",
+                        platformColor: "blue",
+                        linkKey: "actas_drive",
+                        defaultLink: "https://drive.google.com/",
+                        description: "Repositorio general donde se archivan las actas formales de los comités e inducciones de ambas vigencias.",
+                        hasList: false
+                    },
+                    {
+                        code: "1.1",
+                        name: "Actas - Control 2025 (Grado 11)",
+                        grade: "Grado 11",
+                        process: "Verificación Actas 2025 (Google Sheets)",
+                        platform: "Google Sheets",
+                        platformIcon: "fa-file-signature",
+                        platformColor: "emerald",
+                        linkKey: "actas2025_sheets",
+                        defaultLink: "https://docs.google.com/spreadsheets/",
+                        description: "Hoja de verificación de firmas para actas correspondientes a la vigencia anterior (2025).",
+                        hasList: false
+                    },
+                    {
+                        code: "1.2",
+                        name: "Actas - Control 2026 (Grado 10)",
+                        grade: "Grado 10",
+                        process: "Verificación Actas 2026 (Google Sheets)",
+                        platform: "Google Sheets",
+                        platformIcon: "fa-file-signature",
+                        platformColor: "emerald",
+                        linkKey: "actas2026_sheets",
+                        defaultLink: "https://docs.google.com/spreadsheets/",
+                        description: "Hoja de verificación y firmas de actas para los grados 10 y 11 de la vigencia actual (2026).",
+                        hasList: false
+                    }
+                ]
+            },
+            {
+                id: "mod-6",
+                code: "MÓDULO 6",
+                title: "CENTRO DE REPORTES",
+                icon: "fa-chart-line",
+                items: [
+                    {
+                        code: "1.0",
+                        name: "Reportes Consolidados Académicos",
+                        grade: "General",
+                        process: "Listados 2026 (Consolidados / Juicios / Inasistencias)",
+                        platform: "Portal Reportes",
+                        platformIcon: "fa-file-invoice",
+                        platformColor: "purple",
+                        linkKey: "reportes_2026",
+                        defaultLink: "https://docs.google.com/spreadsheets/",
+                        description: "Centro de consulta y generación de reportes consolidados, diseñado para facilitar el seguimiento académico y administrativo. Incluye: Listado de Aprendices, Reporte de Juicios Evaluativos y Consolidado de Inasistencias.",
+                        hasList: true,
+                        listType: "reportes_list",
+                        listTitle: "Reportes Operativos Disponibles",
+                        listItems: [
+                            "• Listado Oficial de Aprendices por Ficha",
+                            "• Reporte de Juicios Evaluativos (Sofía Plus / Zajuna)",
+                            "• Consolidado Mensual de Inasistencias"
+                        ]
+                    }
+                ]
+            },
+            {
+                id: "mod-7",
+                code: "MÓDULO 7",
+                title: "SENSIBILIZACIÓN 2027 (PORTAL RECURSOS Y DOCS I.E.)",
+                icon: "fa-users-viewfinder",
+                items: [
+                    {
+                        code: "1.0",
+                        name: "Portal de Sensibilización Institucional 2027",
+                        grade: "Grado 10",
+                        process: "Portal Programas / Video / PPT",
+                        platform: "Portal Recurso / Drive",
+                        platformIcon: "fa-photo-film",
+                        platformColor: "amber",
+                        linkKey: "sensibilizacion_portal",
+                        defaultLink: "https://drive.google.com/",
+                        description: "Portal general para la fase de sensibilización y divulgación de la oferta educativa para la siguiente vigencia.",
+                        hasList: true,
+                        listType: "sensibilizacion_components",
+                        listTitle: "Componentes del Portal de Sensibilización",
+                        listItems: [
+                            "• Accesos multimedia para 11 programas de formación",
+                            "• Formatos base obligatorios del aprendiz",
+                            "• Documentos de apoyo obligatorios para diligenciar el día de la sesión",
+                            "• Módulo de recepción de documentos de I.E."
+                        ]
+                    }
+                ]
+            },
+            {
+                id: "mod-8",
+                code: "MÓDULO 8",
+                title: "DESARROLLO CURRICULAR Y MATERIALES DE FORMACIÓN",
+                icon: "fa-book-bookmark",
+                items: [
+                    {
+                        code: "1.0",
+                        name: "Alistamiento Curricular Vigencia 2027",
+                        grade: "General",
+                        process: "Repositorio Documental Curricular",
+                        platform: "Repositorio Digital",
+                        platformIcon: "fa-box-archive",
+                        platformColor: "indigo",
+                        linkKey: "desarrollo_curricular",
+                        defaultLink: "https://drive.google.com/",
+                        description: "Carpeta digital estructurada por programa de formación destinada al alistamiento y organización de la documentación requerida para la ejecución de la Formación Profesional Integral durante la vigencia 2027.",
+                        hasList: true,
+                        listType: "curricular_folders",
+                        listTitle: "Subcarpetas Estructuradas por Programa",
+                        listItems: [
+                            "01_Proyecto_Formativo",
+                            "02_Planeación_Pedagógica",
+                            "03_Guías_e_Instrumentos_de_Evaluación",
+                            "04_Materiales_de_Formación"
+                        ]
+                    }
+                ]
+            }
+        ];
+
+        // Global App State
+        let activeGradeFilter = 'all';
+        let searchQuery = '';
+        let viewMode = 'cards';
+        let customLinks = JSON.parse(localStorage.getItem('sena_custom_links') || '{}');
+        const ADMIN_PASSWORD = "sena2026";
+
+        // Initialize Theme Mode
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+
+        // Firestore Public Configuration Path (Rule 1)
+        const linksDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'customLinks');
+
+        async function initAuth() {
+            try {
+                if (initialAuthToken) {
+                    await signInWithCustomToken(auth, initialAuthToken);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (err) {
+                console.error("Error en la autenticación:", err);
+            }
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            if (user) {
+                listenToCloudLinks();
+            }
+        });
+
+        function listenToCloudLinks() {
+            if (!currentUser) return;
+            onSnapshot(linksDocRef, (snapshot) => {
+                if (snapshot.exists()) {
+                    const data = snapshot.data();
+                    if (data && data.links) {
+                        customLinks = data.links;
+                        localStorage.setItem('sena_custom_links', JSON.stringify(customLinks));
+                        renderLinkConfigInputs();
+                        renderModules();
+                        const statusElem = document.getElementById('cloudSyncStatus');
+                        if (statusElem) statusElem.textContent = "Sincronizado en tiempo real con la Nube";
+                    }
+                }
+            }, (error) => {
+                console.error("Error al escuchar cambios en la nube:", error);
+            });
+        }
+
+        async function saveCustomLinksToCloud(links) {
+            if (!currentUser) return;
+            try {
+                await setDoc(linksDocRef, { links: links, updatedAt: new Date().toISOString() }, { merge: true });
+            } catch (e) {
+                console.error("Error al guardar enlaces en la nube:", e);
+            }
+        }
+
+        // DOM Ready Initializer
+        window.addEventListener('DOMContentLoaded', () => {
+            initAuth();
+            setupEventListeners();
+            renderModules();
+            renderLinkConfigInputs();
+        });
+
+        function setupEventListeners() {
+            const toggleBtn = document.getElementById('themeToggle');
+            const toggleMobileBtn = document.getElementById('themeToggleMobile');
+            
+            const toggleTheme = () => {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.theme = 'light';
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.theme = 'dark';
+                }
+            };
+
+            if (toggleBtn) toggleBtn.addEventListener('click', toggleTheme);
+            if (toggleMobileBtn) toggleMobileBtn.addEventListener('click', toggleTheme);
+
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    searchQuery = e.target.value.toLowerCase().trim();
+                    renderModules();
+                });
+            }
+
+            const passInput = document.getElementById('adminPasswordInput');
+            if (passInput) {
+                passInput.addEventListener('keyup', (e) => {
+                    if (e.key === 'Enter') verifyAdminPassword();
+                });
+            }
+        }
+
+        // Admin Security Handlers
+        function openAdminAuthModal() {
+            const passInput = document.getElementById('adminPasswordInput');
+            const errorMsg = document.getElementById('adminAuthError');
+            if (passInput) passInput.value = '';
+            if (errorMsg) errorMsg.classList.add('hidden');
+            openModal('adminAuthModal');
+            setTimeout(() => passInput && passInput.focus(), 100);
+        }
+
+        function verifyAdminPassword() {
+            const passInput = document.getElementById('adminPasswordInput');
+            const errorMsg = document.getElementById('adminAuthError');
+
+            if (passInput && passInput.value === ADMIN_PASSWORD) {
+                closeModal('adminAuthModal');
+                openModal('linkConfigModal');
+            } else {
+                if (errorMsg) errorMsg.classList.remove('hidden');
+            }
+        }
+
+        // Grade Filter Controller
+        function setGradeFilter(grade) {
+            activeGradeFilter = grade;
+            document.querySelectorAll('.grade-filter-btn').forEach(btn => {
+                if (btn.getAttribute('data-grade') === grade) {
+                    btn.className = 'grade-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-sena-500 text-white shadow-sm';
+                } else {
+                    btn.className = 'grade-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition';
+                }
+            });
+            renderModules();
+        }
+
+        function resetFilters() {
+            searchQuery = '';
+            document.getElementById('searchInput').value = '';
+            setGradeFilter('all');
+        }
+
+        function setViewMode(mode) {
+            viewMode = mode;
+            const cardBtn = document.getElementById('viewCardsBtn');
+            const tableBtn = document.getElementById('viewTableBtn');
+            if (mode === 'cards') {
+                cardBtn.className = 'p-1.5 rounded-md text-sena-600 dark:text-sena-400 bg-white dark:bg-slate-900 shadow-sm';
+                tableBtn.className = 'p-1.5 rounded-md text-slate-400 hover:text-slate-600 dark:hover:text-slate-200';
+            } else {
+                tableBtn.className = 'p-1.5 rounded-md text-sena-600 dark:text-sena-400 bg-white dark:bg-slate-900 shadow-sm';
+                cardBtn.className = 'p-1.5 rounded-md text-slate-400 hover:text-slate-600 dark:hover:text-slate-200';
+            }
+            renderModules();
+        }
+
+        // Main Render Engine
+        function renderModules() {
+            const container = document.getElementById('modulesContainer');
+            const emptyState = document.getElementById('emptyState');
+            container.innerHTML = '';
+
+            let totalVisibleItems = 0;
+
+            modulesData.forEach(module => {
+                // Filter items inside module
+                const filteredItems = module.items.filter(item => {
+                    const matchesGrade = activeGradeFilter === 'all' || 
+                                         item.grade === 'General' || 
+                                         item.grade.includes(activeGradeFilter);
+
+                    const matchesSearch = searchQuery === '' || 
+                                          module.title.toLowerCase().includes(searchQuery) ||
+                                          item.name.toLowerCase().includes(searchQuery) ||
+                                          item.code.toLowerCase().includes(searchQuery) ||
+                                          item.process.toLowerCase().includes(searchQuery) ||
+                                          item.description.toLowerCase().includes(searchQuery);
+
+                    return matchesGrade && matchesSearch;
+                });
+
+                if (filteredItems.length > 0) {
+                    totalVisibleItems += filteredItems.length;
+
+                    if (viewMode === 'cards') {
+                        container.appendChild(createModuleCardView(module, filteredItems));
+                    } else {
+                        container.appendChild(createModuleTableView(module, filteredItems));
+                    }
+                }
+            });
+            const statElem = document.getElementById('statTotalItems');
+            if (statElem) statElem.textContent = totalVisibleItems;
+
+            if (totalVisibleItems === 0) {
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+            }
+        }
+
+        function createModuleCardView(module, items) {
+            const wrapper = document.createElement('div');
+            wrapper.className = "bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm overflow-hidden";
+
+            let itemsHtml = items.map(item => {
+                const targetLink = customLinks[item.linkKey] || item.defaultLink;
+                const badgeColor = item.grade === 'Grado 10' ? 'bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-400 border-amber-500/20' :
+                                   item.grade === 'Grado 11' ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-400 border-blue-500/20' :
+                                   'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border-slate-500/20';
+
+                return `
+                    <div class="p-5 rounded-xl bg-slate-50/70 dark:bg-slate-950/50 border border-slate-200/60 dark:border-slate-800 flex flex-col justify-between hover:border-sena-500/50 transition">
+                        <div>
+                            <div class="flex items-center justify-between gap-2 mb-2">
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-xs font-extrabold text-sena-600 dark:text-sena-400 bg-sena-100/80 dark:bg-sena-950 px-2 py-0.5 rounded-md">
+                                        ${item.code}
+                                    </span>
+                                    <span class="text-xs px-2 py-0.5 rounded-full font-medium border ${badgeColor}">
+                                        ${item.grade}
+                                    </span>
+                                </div>
+                                <span class="text-[11px] text-slate-500 dark:text-slate-400 font-medium flex items-center">
+                                    <i class="fa-solid ${item.platformIcon} mr-1 text-sena-500"></i> ${item.platform}
+                                </span>
+                            </div>
+
+                            <h4 class="text-sm font-bold text-slate-900 dark:text-white leading-snug mb-1">
+                                ${item.name}
+                            </h4>
+
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mb-3 line-clamp-3">
+                                ${item.description}
+                            </p>
+                        </div>
+
+                        <div class="pt-3 border-t border-slate-200/60 dark:border-slate-800/80 flex items-center justify-between gap-2">
+                            ${item.hasList ? `
+                                <button onclick="openDetailModal('${module.id}', '${item.code}')" class="text-xs font-semibold text-sena-600 dark:text-sena-400 hover:underline flex items-center">
+                                    <i class="fa-solid fa-list-check mr-1.5"></i> Ver Desglose
+                                </button>
+                            ` : '<div></div>'}
+                            
+                            <a href="${targetLink}" target="_blank" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-sena-500 hover:bg-sena-600 text-white transition inline-flex items-center shrink-0">
+                                <span>Acceder</span>
+                                <i class="fa-solid fa-arrow-up-right-from-square ml-1.5 text-[10px]"></i>
+                            </a>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            wrapper.innerHTML = `
+                <div class="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/30 flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-9 h-9 rounded-xl bg-sena-500 text-white flex items-center justify-center text-base shadow-sm">
+                            <i class="fa-solid ${module.icon}"></i>
+                        </div>
+                        <div>
+                            <span class="text-[11px] font-bold tracking-wider text-sena-600 dark:text-sena-400 uppercase">${module.code}</span>
+                            <h3 class="text-base font-bold text-slate-900 dark:text-white leading-none mt-0.5">${module.title}</h3>
+                        </div>
+                    </div>
+                    <span class="text-xs font-medium text-slate-400 bg-slate-200/60 dark:bg-slate-800 px-2.5 py-1 rounded-full">
+                        ${items.length} ${items.length === 1 ? 'proceso' : 'procesos'}
+                    </span>
+                </div>
+                <div class="p-4 sm:p-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+                    ${itemsHtml}
+                </div>
+            `;
+
+            return wrapper;
+        }
+
+        function createModuleTableView(module, items) {
+            const wrapper = document.createElement('div');
+            wrapper.className = "bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm overflow-hidden";
+
+            let rowsHtml = items.map(item => {
+                const targetLink = customLinks[item.linkKey] || item.defaultLink;
+                return `
+                    <tr class="border-b border-slate-100 dark:border-slate-800/60 hover:bg-slate-50/60 dark:hover:bg-slate-950/40 transition text-xs">
+                        <td class="py-3 px-4 font-extrabold text-sena-600 dark:text-sena-400">${item.code}</td>
+                        <td class="py-3 px-4 font-semibold text-slate-900 dark:text-white">${item.name}</td>
+                        <td class="py-3 px-4">
+                            <span class="px-2 py-0.5 rounded-full text-[11px] font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                                ${item.grade}
+                            </span>
+                        </td>
+                        <td class="py-3 px-4 text-slate-600 dark:text-slate-400 max-w-xs truncate">${item.process}</td>
+                        <td class="py-3 px-4 text-slate-500 dark:text-slate-400 max-w-md">${item.description}</td>
+                        <td class="py-3 px-4 text-right whitespace-nowrap space-x-2">
+                            ${item.hasList ? `
+                                <button onclick="openDetailModal('${module.id}', '${item.code}')" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 transition">
+                                    <i class="fa-solid fa-list-check"></i>
+                                </button>
+                            ` : ''}
+                            <a href="${targetLink}" target="_blank" class="px-3 py-1 rounded-lg bg-sena-500 hover:bg-sena-600 text-white font-medium inline-flex items-center">
+                                <span>Abrir</span>
+                                <i class="fa-solid fa-arrow-up-right-from-square ml-1 text-[10px]"></i>
+                            </a>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            wrapper.innerHTML = `
+                <div class="p-4 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/30 flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <i class="fa-solid ${module.icon} text-sena-500 text-base"></i>
+                        <h3 class="text-sm font-bold text-slate-900 dark:text-white">${module.code}: ${module.title}</h3>
+                    </div>
+                </div>
+                <div class="overflow-x-auto custom-scrollbar">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 dark:bg-slate-950 text-[11px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">
+                                <th class="py-2.5 px-4">Código</th>
+                                <th class="py-2.5 px-4">Proceso / Requisito</th>
+                                <th class="py-2.5 px-4">Población</th>
+                                <th class="py-2.5 px-4">Matriz / Enlace</th>
+                                <th class="py-2.5 px-4">Trazabilidad & Descripción</th>
+                                <th class="py-2.5 px-4 text-right">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${rowsHtml}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+            return wrapper;
+        }
+
+        // Modal Handlers
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        function openDetailModal(moduleId, itemCode) {
+            const module = modulesData.find(m => m.id === moduleId);
+            if (!module) return;
+            const item = module.items.find(i => i.code === itemCode);
+            if (!item) return;
+
+            document.getElementById('modalCodeBadge').textContent = `${module.code} • ${item.code}`;
+            document.getElementById('modalTitle').textContent = item.name;
+
+            const modalBody = document.getElementById('modalBody');
+            
+            let listHtml = '';
+            if (item.hasList && item.listItems) {
+                listHtml = `
+                    <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 space-y-3">
+                        <div class="flex items-center justify-between border-b border-slate-200/60 dark:border-slate-800 pb-2">
+                            <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">${item.listTitle || 'Desglose Requerido'}</h4>
+                            <span class="text-[11px] font-semibold text-sena-600 dark:text-sena-400">${item.listItems.length} ítems</span>
+                        </div>
+                        <ul class="space-y-2">
+                            ${item.listItems.map(listItem => `
+                                <li class="text-xs text-slate-700 dark:text-slate-300 flex items-start space-x-2">
+                                    <i class="fa-solid fa-circle-check text-sena-500 mt-0.5 shrink-0"></i>
+                                    <span>${listItem}</span>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+
+            modalBody.innerHTML = `
+                <div class="space-y-3">
+                    <div class="p-3.5 rounded-xl bg-blue-50/60 dark:bg-blue-950/40 border border-blue-200/50 dark:border-blue-900/40 text-xs text-blue-900 dark:text-blue-300 leading-relaxed">
+                        <i class="fa-solid fa-circle-info text-blue-500 mr-1.5"></i>
+                        ${item.description}
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3 text-xs">
+                        <div class="p-3 rounded-lg bg-slate-100/70 dark:bg-slate-800/50">
+                            <span class="text-slate-400 block text-[10px] font-bold uppercase">Proceso Técnico</span>
+                            <span class="font-semibold text-slate-800 dark:text-slate-200">${item.process}</span>
+                        </div>
+                        <div class="p-3 rounded-lg bg-slate-100/70 dark:bg-slate-800/50">
+                            <span class="text-slate-400 block text-[10px] font-bold uppercase">Plataforma</span>
+                            <span class="font-semibold text-slate-800 dark:text-slate-200">${item.platform}</span>
+                        </div>
+                    </div>
+
+                    ${listHtml}
+                </div>
+            `;
+
+            openModal('detailModal');
+        }
+
+        // Link Configurator Logic with Cloud Persistence
+        function renderLinkConfigInputs() {
+            const container = document.getElementById('linkInputsContainer');
+            if (!container) return;
+            
+            let allItems = [];
+            modulesData.forEach(m => {
+                m.items.forEach(i => {
+                    allItems.push(i);
+                });
+            });
+
+            container.innerHTML = allItems.map(item => {
+                const currentVal = customLinks[item.linkKey] || item.defaultLink;
+                return `
+                    <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1">
+                        <label class="block text-xs font-bold text-slate-800 dark:text-slate-200">
+                            ${item.code} ${item.name} (${item.platform})
+                        </label>
+                        <input type="url" data-key="${item.linkKey}" value="${currentVal}" class="link-input w-full px-3 py-1.5 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-sena-500 outline-none">
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function saveCustomLinks() {
+            const inputs = document.querySelectorAll('.link-input');
+            inputs.forEach(input => {
+                const key = input.getAttribute('data-key');
+                const val = input.value.trim();
+                if (val) {
+                    customLinks[key] = val;
+                }
+            });
+            localStorage.setItem('sena_custom_links', JSON.stringify(customLinks));
+            await saveCustomLinksToCloud(customLinks);
+            closeModal('linkConfigModal');
+            renderModules();
+        }
+
+        async function resetCustomLinks() {
+            customLinks = {};
+            localStorage.removeItem('sena_custom_links');
+            await saveCustomLinksToCloud({});
+            renderLinkConfigInputs();
+            renderModules();
+            closeModal('linkConfigModal');
+        }
+
+        // Expose Functions to Window Object for Global Handler Access
+        window.openAdminAuthModal = openAdminAuthModal;
+        window.verifyAdminPassword = verifyAdminPassword;
+        window.openModal = openModal;
+        window.closeModal = closeModal;
+        window.openDetailModal = openDetailModal;
+        window.setGradeFilter = setGradeFilter;
+        window.resetFilters = resetFilters;
+        window.setViewMode = setViewMode;
+        window.saveCustomLinks = saveCustomLinks;
+        window.resetCustomLinks = resetCustomLinks;
+    </script>
+</body>
+</html>
