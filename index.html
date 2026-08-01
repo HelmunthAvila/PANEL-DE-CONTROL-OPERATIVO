@@ -21,7 +21,7 @@
                         sena: {
                             50: '#f0fdf2',
                             100: '#dcfce5',
-                            500: '#39A900', // SENA Official Green
+                            500: '#39A900', // Verde oficial SENA
                             600: '#2e8800',
                             700: '#236900',
                             800: '#1c5202',
@@ -114,7 +114,6 @@
         <!-- Main Content Area -->
         <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
 
-            <!-- Search and Filter Tools -->
             <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
                 
                 <!-- Search Input -->
@@ -272,7 +271,7 @@
             </div>
 
             <p class="text-xs text-slate-500 dark:text-slate-400">
-                Puedes vincular las URLs reales de tus carpetas de Google Drive y hojas de Google Sheets. Los cambios guardados se reflejarán instantáneamente en todos los dispositivos.
+                Puedes personalizar las URLs de tus carpetas de Google Drive y hojas de Google Sheets. Los cambios guardados se reflejarán instantáneamente en todos los dispositivos.
             </p>
 
             <div id="linkInputsContainer" class="space-y-3 max-h-[50vh] overflow-y-auto custom-scrollbar pr-1">
@@ -318,7 +317,7 @@
 
         let currentUser = null;
 
-        // Data Store for Sena Modules and Operational Sub-items
+        // Data Store for Sena Modules with Hardcoded Direct Links (Enlaces Quemados Directamente)
         const modulesData = [
             {
                 id: "mod-1",
@@ -335,7 +334,7 @@
                         platformIcon: "fa-file-excel",
                         platformColor: "emerald",
                         linkKey: "trd2025",
-                        defaultLink: "https://docs.google.com/spreadsheets/",
+                        defaultLink: "https://docs.google.com/spreadsheets/d/1gYDfBUazPmsdOEC8OputZWC0SAh8PC4UPHaqRk-HH1E?usp=drive_fs",
                         description: "Formato Oficial de Foliación Digital (V.04): Matriz en línea estructurada por pestañas independientes por cada ficha técnica. Garantiza el orden del expediente electrónico exigiendo obligatoriamente foliación exacta.",
                         hasList: false
                     },
@@ -348,7 +347,7 @@
                         platformIcon: "fa-file-excel",
                         platformColor: "emerald",
                         linkKey: "trd2026_hoja",
-                        defaultLink: "https://docs.google.com/spreadsheets/",
+                        defaultLink: "https://docs.google.com/spreadsheets/d/1QV0tnM-pgc39c8CHP2yM2Y2y_Y2UAbgOBpFA4hv1z0g?usp=drive_fs",
                         description: "Formato Oficial de Foliación Digital (V.04): Matriz en línea estructurada por pestañas independientes por cada ficha técnica. Garantiza el orden del expediente electrónico.",
                         hasList: false
                     },
@@ -361,7 +360,7 @@
                         platformIcon: "fa-folder-open",
                         platformColor: "blue",
                         linkKey: "historias_drive",
-                        defaultLink: "https://drive.google.com/",
+                        defaultLink: "https://drive.google.com/open?id=1KR259djdqMhciV03m5ONWsZU3X6nMjjW&usp=drive_fs",
                         description: "Expediente Digital de Matrícula: Compilación obligatoria e individual de los soportes legales escaneados en formato PDF legible por cada aprendiz matriculado. Comprende los 7 documentos de orden obligatorio.",
                         hasList: true,
                         listType: "matricula_docs",
@@ -385,7 +384,7 @@
                         platformIcon: "fa-table-columns",
                         platformColor: "emerald",
                         linkKey: "control_historias",
-                        defaultLink: "https://docs.google.com/spreadsheets/",
+                        defaultLink: "https://docs.google.com/spreadsheets/d/1VOBI0h1e_uSwmYqPahBf1Uxf64sLNBvU7T18uW_zpQs?usp=drive_fs",
                         description: "Panel Central de Control: Tablero dinámico y matriz de consolidación operativa que permite visualizar el estado de auditoría interna de los documentos de matrícula de grado décimo (actualización semanal). Funciona como semáforo de control.",
                         hasList: false
                     }
@@ -406,11 +405,11 @@
                         platformIcon: "fa-folder-open",
                         platformColor: "blue",
                         linkKey: "portafolio_drive",
-                        defaultLink: "https://drive.google.com/",
+                        defaultLink: "https://drive.google.com/open?id=1tFzuPCOKPqgJD76mnNzhJvEFiyWxEIuZ&usp=drive_fs",
                         description: "Portafolio Integral de Gestión Pedagógica: Repositorio obligatorio que custodia las quince (15) evidencias técnicas y pedagógicas requeridas para el desarrollo del plan curricular institucional por parte de los instructores asignados.",
                         hasList: true,
                         listType: "portafolio_evidencias",
-                        listTitle: "15 Evidencias Técinico-Pedagógicas del Portafolio",
+                        listTitle: "15 Evidencias Técnico-Pedagógicas del Portafolio",
                         listItems: [
                             "01. Programa formativo",
                             "02. Proyecto formativo",
@@ -438,7 +437,7 @@
                         platformIcon: "fa-chart-pie",
                         platformColor: "emerald",
                         linkKey: "control_portafolio",
-                        defaultLink: "https://docs.google.com/spreadsheets/",
+                        defaultLink: "https://docs.google.com/spreadsheets/d/1yT13Qt884rEexxrFw5Aa9NAxckn1H5wHjgjCrBFvySA?usp=drive_fs",
                         description: "Tablero Control Cuantitativo: Hoja de control oficial para supervisar el estado de carga de los portafolios de forma individual por ficha y consolidado general.",
                         hasList: false
                     }
@@ -459,7 +458,7 @@
                         platformIcon: "fa-folder-open",
                         platformColor: "blue",
                         linkKey: "asistencia_drive",
-                        defaultLink: "https://drive.google.com/",
+                        defaultLink: "https://drive.google.com/open?id=1zWp1UoIXKZfd4AH4wRqnl1GTYBb6eWg5&usp=drive_fs",
                         description: "Control de Asistencia Unificado: Formato de asistencia unificado para grados 10 y 11. Se recomienda obligatoriamente imprimir y hacer firmar en físico en cada sesión de formación.",
                         hasList: false
                     }
@@ -480,7 +479,7 @@
                         platformIcon: "fa-folder-open",
                         platformColor: "blue",
                         linkKey: "ep2026_drive",
-                        defaultLink: "https://drive.google.com/",
+                        defaultLink: "https://drive.google.com/open?id=1P0Xx4S0Mzfry6pcRxeGpxAsVgM-FpQjz&usp=drive_fs",
                         description: "Repositorio documental oficial que centraliza los soportes de la Etapa Productiva 2026, organizados por programa de formación y aprendiz. Incluye formatos, documentos personales, certificaciones, bitácoras, evaluaciones y actas.",
                         hasList: false
                     },
@@ -493,7 +492,7 @@
                         platformIcon: "fa-list-check",
                         platformColor: "emerald",
                         linkKey: "ep2026_sheets",
-                        defaultLink: "https://docs.google.com/spreadsheets/",
+                        defaultLink: "https://docs.google.com/spreadsheets/d/1INv838b_pCy6_lq2jlMJGYKXoKFRxvyj_yhqZzdij3w?usp=drive_fs",
                         description: "Tablero de control y seguimiento de la Etapa Productiva 2026, que consolida en tiempo real el avance documental por ficha y aprendiz. Permite verificar porcentaje de cumplimiento y fechas de actualización.",
                         hasList: false
                     },
@@ -506,7 +505,7 @@
                         platformIcon: "fa-folder-open",
                         platformColor: "blue",
                         linkKey: "ep2027_drive",
-                        defaultLink: "https://drive.google.com/",
+                        defaultLink: "https://drive.google.com/open?id=1a6OEiYXxIEseSeUXOypOz-2bk10RAZWJ&usp=drive_fs",
                         description: "Repositorio documental oficial que centraliza los soportes de la Etapa Productiva 2027, organizados por programa de formación y aprendiz para grado décimo.",
                         hasList: false
                     },
@@ -519,7 +518,7 @@
                         platformIcon: "fa-list-check",
                         platformColor: "emerald",
                         linkKey: "ep2027_sheets",
-                        defaultLink: "https://docs.google.com/spreadsheets/",
+                        defaultLink: "https://docs.google.com/spreadsheets/d/17oFYIbdiBulBlCiXs07X2iD75ps9DG71e0y4fhatZUs?usp=drive_fs",
                         description: "Tablero de control y seguimiento de la Etapa Productiva 2027, que consolida el avance documental proyectado por ficha y aprendiz.",
                         hasList: false
                     }
@@ -540,7 +539,7 @@
                         platformIcon: "fa-folder-open",
                         platformColor: "blue",
                         linkKey: "actas_drive",
-                        defaultLink: "https://drive.google.com/",
+                        defaultLink: "https://drive.google.com/drive/folders/1l6B410OFDko1Ft3eBTSuQH9nMfDTCaWm?usp=sharing",
                         description: "Repositorio general donde se archivan las actas formales de los comités e inducciones de ambas vigencias.",
                         hasList: false
                     },
@@ -553,7 +552,7 @@
                         platformIcon: "fa-file-signature",
                         platformColor: "emerald",
                         linkKey: "actas2025_sheets",
-                        defaultLink: "https://docs.google.com/spreadsheets/",
+                        defaultLink: "https://docs.google.com/spreadsheets/d/1kYu3yoU05B61LU80bmDh1MM8uJf-yukZRFRWN-vYmFw/edit?usp=sharing",
                         description: "Hoja de verificación de firmas para actas correspondientes a la vigencia anterior (2025).",
                         hasList: false
                     },
@@ -566,7 +565,7 @@
                         platformIcon: "fa-file-signature",
                         platformColor: "emerald",
                         linkKey: "actas2026_sheets",
-                        defaultLink: "https://docs.google.com/spreadsheets/",
+                        defaultLink: "https://docs.google.com/spreadsheets/d/1Gnql6uVrB6NNsD6PzjP65vGADPSKKtyBTz7zuQYRMX0/edit?usp=sharing",
                         description: "Hoja de verificación y firmas de actas para los grados 10 y 11 de la vigencia actual (2026).",
                         hasList: false
                     }
@@ -580,14 +579,14 @@
                 items: [
                     {
                         code: "1.0",
-                        name: "Reportes Consolidados Académicos",
+                        name: "Reportes Consolidados Académicos 2026",
                         grade: "General",
                         process: "Listados 2026 (Consolidados / Juicios / Inasistencias)",
-                        platform: "Portal Reportes",
-                        platformIcon: "fa-file-invoice",
+                        platform: "SharePoint SENA",
+                        platformIcon: "fa-cloud",
                         platformColor: "purple",
                         linkKey: "reportes_2026",
-                        defaultLink: "https://docs.google.com/spreadsheets/",
+                        defaultLink: "https://sena4-my.sharepoint.com/:f:/r/personal/cmantillad_sena_edu_co/Documents/2026/Articulacion/listados%202026?csf=1&web=1&e=hTB1Og",
                         description: "Centro de consulta y generación de reportes consolidados, diseñado para facilitar el seguimiento académico y administrativo. Incluye: Listado de Aprendices, Reporte de Juicios Evaluativos y Consolidado de Inasistencias.",
                         hasList: true,
                         listType: "reportes_list",
@@ -610,21 +609,21 @@
                         code: "1.0",
                         name: "Portal de Sensibilización Institucional 2027",
                         grade: "Grado 10",
-                        process: "Portal Programas / Video / PPT",
-                        platform: "Portal Recurso / Drive",
+                        process: "Portal Programas / Video / PPT / Documentos I.E.",
+                        platform: "Google Sheets",
                         platformIcon: "fa-photo-film",
                         platformColor: "amber",
                         linkKey: "sensibilizacion_portal",
-                        defaultLink: "https://drive.google.com/",
+                        defaultLink: "https://docs.google.com/spreadsheets/d/15L1yKBylcbZuP4ZJOCbaxcmNwDEG9uXbaO1YtFI3Bks/edit?usp=sharing",
                         description: "Portal general para la fase de sensibilización y divulgación de la oferta educativa para la siguiente vigencia.",
                         hasList: true,
                         listType: "sensibilizacion_components",
                         listTitle: "Componentes del Portal de Sensibilización",
                         listItems: [
-                            "• Accesos multimedia para 11 programas de formación",
-                            "• Formatos base obligatorios del aprendiz",
-                            "• Documentos de apoyo obligatorios para diligenciar el día de la sesión",
-                            "• Módulo de recepción de documentos de I.E."
+                            "• Oferta Programas de Formación 2027",
+                            "• Documentos del Proceso",
+                            "• Material de Apoyo y Gestión I.E.",
+                            "• Entrega de Soportes I.E. (Portal Programas / Video / PPT)"
                         ]
                     }
                 ]
@@ -639,12 +638,12 @@
                         code: "1.0",
                         name: "Alistamiento Curricular Vigencia 2027",
                         grade: "General",
-                        process: "Repositorio Documental Curricular",
-                        platform: "Repositorio Digital",
+                        process: "Alistamiento Curricular por Programa / Proyecto Formativo",
+                        platform: "Google Drive Repositorio",
                         platformIcon: "fa-box-archive",
                         platformColor: "indigo",
                         linkKey: "desarrollo_curricular",
-                        defaultLink: "https://drive.google.com/",
+                        defaultLink: "https://drive.google.com/drive/folders/1EKbg6Zu_nKubPxvEv79pKcH0YVhC8IYy?usp=sharing",
                         description: "Carpeta digital estructurada por programa de formación destinada al alistamiento y organización de la documentación requerida para la ejecución de la Formación Profesional Integral durante la vigencia 2027.",
                         hasList: true,
                         listType: "curricular_folders",
@@ -724,7 +723,6 @@
             }
         }
 
-        // DOM Ready Initializer
         window.addEventListener('DOMContentLoaded', () => {
             initAuth();
             setupEventListeners();
@@ -820,7 +818,6 @@
             renderModules();
         }
 
-        // Main Render Engine
         function renderModules() {
             const container = document.getElementById('modulesContainer');
             const emptyState = document.getElementById('emptyState');
@@ -829,7 +826,6 @@
             let totalVisibleItems = 0;
 
             modulesData.forEach(module => {
-                // Filter items inside module
                 const filteredItems = module.items.filter(item => {
                     const matchesGrade = activeGradeFilter === 'all' || 
                                          item.grade === 'General' || 
@@ -855,8 +851,6 @@
                     }
                 }
             });
-            const statElem = document.getElementById('statTotalItems');
-            if (statElem) statElem.textContent = totalVisibleItems;
 
             if (totalVisibleItems === 0) {
                 emptyState.classList.remove('hidden');
@@ -870,6 +864,7 @@
             wrapper.className = "bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm overflow-hidden";
 
             let itemsHtml = items.map(item => {
+                // Genera la URL hardcodeada o custom
                 const targetLink = customLinks[item.linkKey] || item.defaultLink;
                 const badgeColor = item.grade === 'Grado 10' ? 'bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-400 border-amber-500/20' :
                                    item.grade === 'Grado 11' ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-400 border-blue-500/20' :
@@ -908,7 +903,7 @@
                                 </button>
                             ` : '<div></div>'}
                             
-                            <a href="${targetLink}" target="_blank" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-sena-500 hover:bg-sena-600 text-white transition inline-flex items-center shrink-0">
+                            <a href="${targetLink}" target="_blank" rel="noopener noreferrer" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-sena-500 hover:bg-sena-600 text-white transition inline-flex items-center shrink-0 shadow-sm shadow-sena-500/20">
                                 <span>Acceder</span>
                                 <i class="fa-solid fa-arrow-up-right-from-square ml-1.5 text-[10px]"></i>
                             </a>
@@ -963,7 +958,7 @@
                                     <i class="fa-solid fa-list-check"></i>
                                 </button>
                             ` : ''}
-                            <a href="${targetLink}" target="_blank" class="px-3 py-1 rounded-lg bg-sena-500 hover:bg-sena-600 text-white font-medium inline-flex items-center">
+                            <a href="${targetLink}" target="_blank" rel="noopener noreferrer" class="px-3 py-1 rounded-lg bg-sena-500 hover:bg-sena-600 text-white font-medium inline-flex items-center shadow-sm">
                                 <span>Abrir</span>
                                 <i class="fa-solid fa-arrow-up-right-from-square ml-1 text-[10px]"></i>
                             </a>
@@ -1001,7 +996,6 @@
             return wrapper;
         }
 
-        // Modal Handlers
         function openModal(modalId) {
             document.getElementById(modalId).classList.remove('hidden');
             document.body.style.overflow = 'hidden';
@@ -1083,7 +1077,7 @@
             container.innerHTML = allItems.map(item => {
                 const currentVal = customLinks[item.linkKey] || item.defaultLink;
                 return `
-                    <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1">
+                    <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 space-y-1">
                         <label class="block text-xs font-bold text-slate-800 dark:text-slate-200">
                             ${item.code} ${item.name} (${item.platform})
                         </label>
