@@ -26,10 +26,6 @@
                             700: '#236900',
                             800: '#1c5202',
                             900: '#174305',
-                        },
-                        navy: {
-                            800: '#0f172a',
-                            900: '#090d16',
                         }
                     },
                     fontFamily: {
@@ -55,11 +51,11 @@
             background: rgba(57, 169, 0, 0.7);
         }
         .glass-panel {
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.88);
             backdrop-filter: blur(12px);
         }
         .dark .glass-panel {
-            background: rgba(15, 23, 42, 0.85);
+            background: rgba(15, 23, 42, 0.88);
             backdrop-filter: blur(12px);
         }
     </style>
@@ -96,12 +92,21 @@
                     </div>
 
                     <!-- Action Bar -->
-                    <div class="flex items-center space-x-2.5 w-full md:w-auto justify-end">
-                        <button onclick="openAdminAuthModal()" class="inline-flex items-center px-3.5 py-2 rounded-xl text-xs font-medium bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition shadow-sm">
-                            <i class="fa-solid fa-lock text-sena-500 mr-2"></i>
+                    <div class="flex items-center space-x-2 w-full md:w-auto justify-end flex-wrap gap-y-2">
+                        <!-- Help / User Guide Button -->
+                        <button onclick="openModal('guideModal')" class="inline-flex items-center px-3 py-2 rounded-xl text-xs font-semibold bg-sena-50 dark:bg-sena-950 text-sena-700 dark:text-sena-300 border border-sena-500/30 hover:bg-sena-100 dark:hover:bg-sena-900/40 transition shadow-sm">
+                            <i class="fa-solid fa-circle-question text-sena-500 mr-1.5"></i>
+                            Guía de Uso
+                        </button>
+                        
+                        <!-- Admin Access Button -->
+                        <button onclick="openAdminAuthModal()" class="inline-flex items-center px-3 py-2 rounded-xl text-xs font-medium bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition shadow-sm">
+                            <i class="fa-solid fa-lock text-sena-500 mr-1.5"></i>
                             Gestión Admin
                         </button>
-                        <button id="themeToggle" class="hidden md:flex p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                        
+                        <!-- Theme Toggle (Desktop) -->
+                        <button id="themeToggle" class="hidden md:flex p-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
                             <i class="fa-solid fa-moon dark:hidden text-base"></i>
                             <i class="fa-solid fa-sun hidden dark:block text-amber-400 text-base"></i>
                         </button>
@@ -111,47 +116,60 @@
             </div>
         </header>
 
-        <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+        <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-5">
 
-            <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3">
                 
-                <!-- Search Input -->
-                <div class="relative w-full md:w-96">
-                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                        <i class="fa-solid fa-magnifying-glass"></i>
+                <div class="flex flex-col md:flex-row items-center justify-between gap-3">
+                    <!-- Search Input -->
+                    <div class="relative w-full md:w-96">
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </div>
+                        <input type="text" id="searchInput" placeholder="Buscar por módulo, código, proceso o palabra clave..." class="w-full pl-10 pr-4 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-sena-500 transition">
                     </div>
-                    <input type="text" id="searchInput" placeholder="Buscar por módulo, código, proceso o palabra clave..." class="w-full pl-10 pr-4 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-sena-500 transition">
+
+                    <!-- Grade Filter Buttons -->
+                    <div class="flex flex-wrap items-center gap-1.5 w-full md:w-auto justify-end">
+                        <span class="text-xs font-semibold text-slate-400 mr-1 hidden sm:inline"><i class="fa-solid fa-graduation-cap mr-1"></i> Grado:</span>
+                        <button onclick="setGradeFilter('all')" class="grade-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-sena-500 text-white shadow-sm" data-grade="all">
+                            Todos
+                        </button>
+                        <button onclick="setGradeFilter('Grado 10')" class="grade-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition" data-grade="Grado 10">
+                            Grado 10
+                        </button>
+                        <button onclick="setGradeFilter('Grado 11')" class="grade-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition" data-grade="Grado 11">
+                            Grado 11
+                        </button>
+                        
+                        <div class="h-4 w-px bg-slate-200 dark:bg-slate-800 mx-1"></div>
+
+                        <!-- Layout Toggle Controls -->
+                        <div class="flex items-center bg-slate-100 dark:bg-slate-800 p-1 rounded-lg space-x-1">
+                            <button onclick="setViewMode('cards')" id="viewCardsBtn" class="p-1.5 rounded-md text-sena-600 dark:text-sena-400 bg-white dark:bg-slate-900 shadow-sm" title="Vista en Tarjetas">
+                                <i class="fa-solid fa-grip text-xs"></i>
+                            </button>
+                            <button onclick="setViewMode('table')" id="viewTableBtn" class="p-1.5 rounded-md text-slate-400 hover:text-slate-600 dark:hover:text-slate-200" title="Vista Matriz / Tabla">
+                                <i class="fa-solid fa-list text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Filters -->
-                <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
-                    <span class="text-xs font-medium text-slate-400 mr-1 hidden sm:inline"><i class="fa-solid fa-filter mr-1"></i> Grado:</span>
-                    <button onclick="setGradeFilter('all')" class="grade-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-sena-500 text-white shadow-sm" data-grade="all">
-                        Todos
-                    </button>
-                    <button onclick="setGradeFilter('Grado 10')" class="grade-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition" data-grade="Grado 10">
-                        Grado 10
-                    </button>
-                    <button onclick="setGradeFilter('Grado 11')" class="grade-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition" data-grade="Grado 11">
-                        Grado 11
-                    </button>
-                    
-                    <div class="h-4 w-px bg-slate-200 dark:bg-slate-800 mx-1"></div>
-
-                    <!-- Layout Toggle Controls -->
-                    <div class="flex items-center bg-slate-100 dark:bg-slate-800 p-1 rounded-lg space-x-1">
-                        <button onclick="setViewMode('cards')" id="viewCardsBtn" class="p-1.5 rounded-md text-sena-600 dark:text-sena-400 bg-white dark:bg-slate-900 shadow-sm" title="Vista en Tarjetas">
-                            <i class="fa-solid fa-grip text-xs"></i>
-                        </button>
-                        <button onclick="setViewMode('table')" id="viewTableBtn" class="p-1.5 rounded-md text-slate-400 hover:text-slate-600 dark:hover:text-slate-200" title="Vista Matriz / Tabla">
-                            <i class="fa-solid fa-list text-xs"></i>
-                        </button>
-                    </div>
+                <!-- Quick Category Filter Pills -->
+                <div class="flex items-center space-x-2 overflow-x-auto custom-scrollbar pb-1 pt-1 border-t border-slate-100 dark:border-slate-800/80 text-xs">
+                    <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider shrink-0 mr-1"><i class="fa-solid fa-filter mr-1"></i> Categorías:</span>
+                    <button onclick="setCategoryFilter('all')" class="cat-pill-btn px-2.5 py-1 rounded-md bg-sena-100 dark:bg-sena-950 text-sena-700 dark:text-sena-300 font-semibold shrink-0" data-cat="all">Todas</button>
+                    <button onclick="setCategoryFilter('TRD')" class="cat-pill-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 shrink-0" data-cat="TRD">Gestión Documental TRD</button>
+                    <button onclick="setCategoryFilter('Portafolio')" class="cat-pill-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 shrink-0" data-cat="Portafolio">Portafolio Instructor</button>
+                    <button onclick="setCategoryFilter('Etapa Productiva')" class="cat-pill-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 shrink-0" data-cat="Etapa Productiva">Etapa Productiva (EP)</button>
+                    <button onclick="setCategoryFilter('Actas')" class="cat-pill-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 shrink-0" data-cat="Actas">Gobernanza y Actas</button>
+                    <button onclick="setCategoryFilter('Sensibilización')" class="cat-pill-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 shrink-0" data-cat="Sensibilización">Sensibilización 2027</button>
+                    <button onclick="setCategoryFilter('Curricular')" class="cat-pill-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 shrink-0" data-cat="Curricular">Desarrollo Curricular</button>
                 </div>
 
             </div>
 
-            <!-- Modules Container -->
             <div id="modulesContainer" class="space-y-6">
                 <!-- Dynamically populated via JS -->
             </div>
@@ -160,7 +178,7 @@
             <div id="emptyState" class="hidden text-center py-12 px-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800">
                 <i class="fa-solid fa-folder-open text-4xl text-slate-300 dark:text-slate-600 mb-3"></i>
                 <h3 class="text-base font-semibold text-slate-800 dark:text-slate-200">No se encontraron procesos</h3>
-                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Prueba ajustando el término de búsqueda o cambiando el filtro de grado.</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Prueba ajustando el término de búsqueda o cambiando el filtro de grado/categoría.</p>
                 <button onclick="resetFilters()" class="mt-4 px-4 py-2 rounded-xl text-xs font-medium bg-sena-500 text-white hover:bg-sena-600 transition">
                     Restablecer Filtros
                 </button>
@@ -168,7 +186,6 @@
 
         </main>
 
-        <!-- Footer -->
         <footer class="mt-auto border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-6">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
                 <div class="flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400">
@@ -177,14 +194,76 @@
                     <span>Vigencia Operativa 2026</span>
                 </div>
                 <div class="text-xs text-slate-400 dark:text-slate-500">
-                    Control Documental y Trazabilidad Digital • Versión 4.0
+                    Control Documental y Trazabilidad Digital • Versión 4.2
                 </div>
             </div>
         </footer>
 
     </div>
 
-    <!-- Modal: Detail / Checklist Viewer -->
+    <div id="guideModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-2xl w-full p-6 shadow-2xl space-y-5 my-8">
+            <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-sena-100 dark:bg-sena-950 text-sena-600 dark:text-sena-400 flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-map-location-dot"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900 dark:text-white">Guía Rápida del Panel de Control SENA</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Instructivo de navegación, convenciones e interactividad</p>
+                    </div>
+                </div>
+                <button onclick="closeModal('guideModal')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <div class="space-y-4 text-xs text-slate-600 dark:text-slate-300 max-h-[60vh] overflow-y-auto custom-scrollbar pr-1">
+                <div class="p-3.5 rounded-xl bg-sena-50 dark:bg-sena-950/60 border border-sena-500/30 space-y-1">
+                    <h4 class="font-bold text-sena-800 dark:text-sena-300 text-xs">🎯 Propósito del Panel</h4>
+                    <p class="leading-relaxed">Este aplicativo centraliza los 8 módulos de gestión operacional para la Articulación con la Educación Media. Facilita el acceso rápido a matrices en Google Sheets y repositorios en Google Drive o SharePoint.</p>
+                </div>
+
+                <div class="space-y-2">
+                    <h4 class="font-bold text-slate-900 dark:text-white text-xs">📌 Convenciones de Colores y Estados:</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <div class="p-2.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 flex items-center space-x-2">
+                            <span class="w-3 h-3 rounded-full bg-emerald-500 shrink-0"></span>
+                            <span><strong>Verde (Satisfactorio):</strong> La revisión fue conforme y no presenta novedades.</span>
+                        </div>
+                        <div class="p-2.5 rounded-lg bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 flex items-center space-x-2">
+                            <span class="w-3 h-3 rounded-full bg-rose-500 shrink-0"></span>
+                            <span><strong>Rojo (Novedad):</strong> Documentación o firmas pendientes de corregir.</span>
+                        </div>
+                        <div class="p-2.5 rounded-lg bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 flex items-center space-x-2">
+                            <i class="fa-solid fa-folder-open text-blue-500 shrink-0 text-sm"></i>
+                            <span><strong>Google Drive:</strong> Repositorios de expedientes, soportes y bitácoras.</span>
+                        </div>
+                        <div class="p-2.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 flex items-center space-x-2">
+                            <i class="fa-solid fa-file-excel text-emerald-600 shrink-0 text-sm"></i>
+                            <span><strong>Google Sheets:</strong> Matrices de control cuantitativo y seguimiento semanal.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <h4 class="font-bold text-slate-900 dark:text-white text-xs">🛠️ Herramientas Interactivas:</h4>
+                    <ul class="list-disc list-inside space-y-1.5 pl-1 leading-relaxed">
+                        <li><strong>Ver Desglose / Tareas:</strong> Abre la lista detallada de actividades obligatorias y permite marcar tareas como completadas (el progreso se guarda en tu navegador).</li>
+                        <li><strong>Botón Acceder / Abrir:</strong> Te lleva directamente a la carpeta o matriz correspondiente.</li>
+                        <li><strong>Gestión Admin (Contraseña <code class="bg-slate-200 dark:bg-slate-800 px-1 py-0.5 rounded text-sena-600 dark:text-sena-400 font-bold">sena2026</code>):</strong> Permite personalizar y actualizar las URLs de todos los enlaces para todo el equipo en tiempo real.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-end border-t border-slate-100 dark:border-slate-800 pt-4">
+                <button onclick="closeModal('guideModal')" class="px-4 py-2 rounded-xl text-xs font-semibold bg-sena-500 hover:bg-sena-600 text-white transition">
+                    Entendido
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div id="detailModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-2xl w-full p-6 shadow-2xl space-y-5 my-8">
             <div class="flex items-start justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
@@ -203,10 +282,13 @@
             </div>
 
             <div id="modalBody" class="space-y-4">
-                <!-- Content inserted via JS -->
+                <!-- Dynamic Content & Interactive Checklist JS populated -->
             </div>
 
-            <div class="flex items-center justify-end border-t border-slate-100 dark:border-slate-800 pt-4">
+            <div class="flex items-center justify-between border-t border-slate-100 dark:border-slate-800 pt-4">
+                <button onclick="resetTaskProgressForCurrentItem()" class="text-xs text-rose-500 hover:underline font-medium">
+                    Restablecer Marcas
+                </button>
                 <button onclick="closeModal('detailModal')" class="px-4 py-2 rounded-xl text-xs font-medium bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition">
                     Cerrar
                 </button>
@@ -214,7 +296,6 @@
         </div>
     </div>
 
-    <!-- Modal: Admin Password Verification -->
     <div id="adminAuthModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4">
             <div class="flex items-center space-x-3 border-b border-slate-100 dark:border-slate-800 pb-3">
@@ -244,7 +325,6 @@
         </div>
     </div>
 
-    <!-- Modal: Link Customizer -->
     <div id="linkConfigModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-xl w-full p-6 shadow-2xl space-y-4 my-8">
             <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
@@ -257,7 +337,6 @@
                 </button>
             </div>
 
-            <!-- Cloud Sync Indicator -->
             <div class="flex items-center justify-between px-3 py-2 rounded-xl bg-sena-50 dark:bg-sena-950/60 border border-sena-500/30 text-xs text-sena-700 dark:text-sena-300">
                 <div class="flex items-center space-x-2">
                     <span class="relative flex h-2.5 w-2.5">
@@ -270,7 +349,7 @@
             </div>
 
             <p class="text-xs text-slate-500 dark:text-slate-400">
-                Puedes personalizar las URLs de tus carpetas de Google Drive y hojas de Google Sheets. Los cambios guardados se reflejarán instantáneamente en todos los dispositivos.
+                Puedes vincular las URLs reales de tus carpetas de Google Drive y hojas de Google Sheets. Los cambios guardados se reflejarán instantáneamente en todos los dispositivos.
             </p>
 
             <div id="linkInputsContainer" class="space-y-3 max-h-[50vh] overflow-y-auto custom-scrollbar pr-1">
@@ -316,11 +395,13 @@
 
         let currentUser = null;
 
+        // Complete Dataset with Quemados Links and Full Task Breakdowns
         const modulesData = [
             {
                 id: "mod-1",
                 code: "MÓDULO 1",
                 title: "GESTIÓN DOCUMENTAL Y TABLAS DE RETENCIÓN (TRD)",
+                category: "TRD",
                 icon: "fa-folder-tree",
                 items: [
                     {
@@ -330,22 +411,19 @@
                         process: "Proceso Gestión Documental – Hoja Control GD-F-003 Formato Hoja Control 2025 (Google Sheets)",
                         platform: "Google Sheets",
                         platformIcon: "fa-file-excel",
-                        platformColor: "emerald",
                         linkKey: "trd2025",
                         defaultLink: "https://docs.google.com/spreadsheets/d/1gYDfBUazPmsdOEC8OputZWC0SAh8PC4UPHaqRk-HH1E?usp=drive_fs",
                         description: "Formato Oficial de Foliación Digital (V.04): La Hoja de Control corresponde a una matriz en línea, organizada mediante pestañas independientes para cada ficha técnica, cuyo propósito es garantizar el correcto orden y control del expediente electrónico.",
                         hasList: true,
-                        listType: "trd_activities",
-                        listTitle: "Actividades a Realizar (Procedimiento GD-F-003)",
+                        listTitle: "Actividades a Realizar (GD-F-003)",
                         listItems: [
                             "Buscar la carpeta física correspondiente a la ficha técnica asignada.",
                             "Organizar la documentación de acuerdo con la Hoja de Control, verificando el orden documental establecido.",
                             "Realizar la foliación del expediente físico.",
                             "Verificar que la numeración de folios registrada en la Hoja de Control coincida exactamente con la foliación del expediente físico.",
-                            "En caso de presentarse alguna novedad, registrarla en la columna Observaciones e informar al aprendiz para realizar la respectiva corrección o subsanación.",
+                            "En caso de presentarse alguna novedad, registrarla en la columna Observaciones e informar al aprendiz para realizar la respectiva corrección.",
                             "Eliminar las columnas vacías o sin información de la hoja de cálculo, manteniendo únicamente los campos necesarios.",
-                            "Código de Colores - Verde: La revisión fue satisfactoria y no presenta novedades.",
-                            "Código de Colores - Rojo: Se encontraron novedades o inconsistencias pendientes de corregir."
+                            "Identificar el estado mediante código de colores: Verde (Satisfactorio, sin novedades), Rojo (Inconsistencias pendientes por corregir)."
                         ]
                     },
                     {
@@ -355,22 +433,19 @@
                         process: "Proceso Gestión Documental – Hoja Control GD-F-003 Formato Hoja Control 2026 (Google Sheets)",
                         platform: "Google Sheets",
                         platformIcon: "fa-file-excel",
-                        platformColor: "emerald",
                         linkKey: "trd2026_hoja",
                         defaultLink: "https://docs.google.com/spreadsheets/d/1QV0tnM-pgc39c8CHP2yM2Y2y_Y2UAbgOBpFA4hv1z0g?usp=drive_fs",
                         description: "Formato Oficial de Foliación Digital (V.04): La Hoja de Control corresponde a una matriz en línea, organizada mediante pestañas independientes para cada ficha técnica, cuyo propósito es garantizar el correcto orden y control del expediente electrónico.",
                         hasList: true,
-                        listType: "trd_activities",
-                        listTitle: "Actividades a Realizar (Procedimiento GD-F-003)",
+                        listTitle: "Actividades a Realizar (GD-F-003)",
                         listItems: [
                             "Buscar la carpeta física correspondiente a la ficha técnica asignada.",
                             "Organizar la documentación de acuerdo con la Hoja de Control, verificando el orden documental establecido.",
                             "Realizar la foliación del expediente físico.",
                             "Verificar que la numeración de folios registrada en la Hoja de Control coincida exactamente con la foliación del expediente físico.",
-                            "En caso de presentarse alguna novedad, registrarla en la columna Observaciones e informar al aprendiz para realizar la respectiva corrección o subsanación.",
-                            "Eliminar las columnas vacías o sin información de la hoja de cálculo, manteniendo únicamente los campos necesarios.",
-                            "Código de Colores - Verde: La revisión fue satisfactoria y no presenta novedades.",
-                            "Código de Colores - Rojo: Se encontraron novedades o inconsistencias pendientes de corregir."
+                            "En caso de presentarse alguna novedad, registrarla en la columna Observaciones e informar al aprendiz.",
+                            "Eliminar las columnas vacías o sin información de la hoja de cálculo.",
+                            "Código de colores: Verde (Revisión satisfactoria), Rojo (Novedades pendientes de corregir)."
                         ]
                     },
                     {
@@ -380,13 +455,11 @@
                         process: "Historias Académicas (Google Drive)",
                         platform: "Google Drive",
                         platformIcon: "fa-folder-open",
-                        platformColor: "blue",
                         linkKey: "historias_drive",
                         defaultLink: "https://drive.google.com/open?id=1KR259djdqMhciV03m5ONWsZU3X6nMjjW&usp=drive_fs",
-                        description: "Expediente Digital de Matrícula: Compilación individual y obligatoria de los documentos legales de cada aprendiz matriculado, escaneados en formato PDF, completamente legibles y organizados en Google Drive. Comprende los 7 documentos de orden obligatorio.",
+                        description: "Expediente Digital de Matrícula: El Expediente Digital de Matrícula corresponde a la compilación individual y obligatoria de los documentos legales de cada aprendiz matriculado, escaneados en formato PDF, completamente legibles y organizados en Google Drive.",
                         hasList: true,
-                        listType: "matricula_docs",
-                        listTitle: "7 Documentos Obligatorios & Actividades a Realizar",
+                        listTitle: "7 Documentos Obligatorios & Actividades",
                         listItems: [
                             "01. Registro Sistema matrícula",
                             "02. Documento Identidad",
@@ -395,12 +468,9 @@
                             "05. Documento Padre o Acudiente",
                             "06. Certificación afiliación EPS",
                             "07. Registro Asistencia Matrícula",
-                            "Actividad 1: Escanear los documentos de cada aprendiz de forma individual.",
-                            "Actividad 2: Guardar cada archivo en formato PDF asignando el nombre correspondiente.",
-                            "Actividad 3: Verificar que los documentos sean completamente legibles (sin tachones ni sombras).",
-                            "Actividad 4: Confirmar que los 7 documentos obligatorios estén completos.",
-                            "Actividad 5: Organizar los archivos en la carpeta de Google Drive institucional.",
-                            "Actividad 6: Gestionar subsanación de novedades con aprendiz o acudiente si se requiere."
+                            "Escanear los documentos de cada aprendiz de forma individual en PDF.",
+                            "Verificar que todos los documentos sean completamente legibles (sin borrones ni sombras).",
+                            "Confirmar que los 7 documentos obligatorios estén completos y cargados en Drive."
                         ]
                     },
                     {
@@ -410,22 +480,19 @@
                         process: "Control Historias Académicas (Google Sheets)",
                         platform: "Google Sheets",
                         platformIcon: "fa-table-columns",
-                        platformColor: "emerald",
                         linkKey: "control_historias",
                         defaultLink: "https://docs.google.com/spreadsheets/d/1VOBI0h1e_uSwmYqPahBf1Uxf64sLNBvU7T18uW_zpQs?usp=drive_fs",
                         description: "Panel Central de Control: El Control de Historias Académicas corresponde a un panel central en Google Sheets que consolida y monitorea el estado de los expedientes digitales de matrícula de grado décimo. Funciona como tablero dinámico de auditoría interna.",
                         hasList: true,
-                        listType: "control_historias_steps",
-                        listTitle: "Actividades a Realizar (Auditoría y Seguimiento Semanal)",
+                        listTitle: "Actividades de Auditoría y Seguimiento Semanal",
                         listItems: [
-                            "1. Verificar el tablero de control (dashboard) para conocer el estado general de cada ficha.",
-                            "2. Ingresar a la hoja de cada ficha e identificar documentos pendientes, incompletos o con novedades.",
-                            "3. Revisar el expediente digital del aprendiz y validar la información registrada.",
-                            "4. Gestionar la corrección o subsanación de documentos que presenten inconsistencias.",
-                            "5. Confirmar que el estado de cada aprendiz se refleje correctamente tras la subsanación.",
-                            "6. Actualizar semanalmente la información en el Google Sheets.",
-                            "7. Verificar que el enlace al expediente digital funcione correctamente.",
-                            "8. Garantizar que antes del cierre de la ficha todos los requisitos documentales estén validados."
+                            "Verificar el tablero de control (dashboard) para conocer el estado general de cada ficha.",
+                            "Ingresar a la hoja correspondiente e identificar documentos pendientes o con novedades.",
+                            "Revisar el expediente digital del aprendiz y validar la información.",
+                            "Gestionar la corrección de documentos que presenten inconsistencias.",
+                            "Confirmar que el estado del aprendiz se refleje correctamente tras la subsanación.",
+                            "Actualizar semanalmente la información en el Google Sheets.",
+                            "Garantizar que antes del cierre de la ficha todos los requisitos estén validados."
                         ]
                     }
                 ]
@@ -434,6 +501,7 @@
                 id: "mod-2",
                 code: "MÓDULO 2",
                 title: "GESTIÓN PEDAGÓGICA (PORTAFOLIO INSTRUCTOR)",
+                category: "Portafolio",
                 icon: "fa-chalkboard-user",
                 items: [
                     {
@@ -443,33 +511,28 @@
                         process: "Carpeta de Evidencias (Google Drive)",
                         platform: "Google Drive",
                         platformIcon: "fa-folder-open",
-                        platformColor: "blue",
                         linkKey: "portafolio_drive",
                         defaultLink: "https://drive.google.com/open?id=1tFzuPCOKPqgJD76mnNzhJvEFiyWxEIuZ&usp=drive_fs",
-                        description: "Portafolio Integral de Gestión Pedagógica: Repositorio digital obligatorio donde cada instructor debe custodiar y mantener actualizadas las 15 evidencias técnicas, académicas y administrativas requeridas para el desarrollo del plan curricular.",
+                        description: "Portafolio Integral de Gestión Pedagógica: Repositorio digital obligatorio donde cada instructor debe custodiar y mantener actualizadas las 15 evidencias técnicas, académicas y administrativas requeridas.",
                         hasList: true,
-                        listType: "portafolio_evidencias",
-                        listTitle: "15 Evidencias del Portafolio & Actividades a Realizar",
+                        listTitle: "15 Evidencias del Portafolio & Tareas",
                         listItems: [
-                            "01. Programa Formativo (Subir programa asignado)",
-                            "02. Proyecto Formativo (Descargado de SENA Sofía Plus)",
-                            "03. Viabilidad del Proyecto (Descargado de SENA Sofía Plus)",
-                            "04. Planeación Pedagógica (Aprobada por Red de Conocimiento)",
-                            "05. Verificación del Ambiente de Formación (Acta y registro fotográfico)",
-                            "06. Guías e Instrumentos de Evaluación (Actualizadas)",
-                            "07. Cierre de Inducción (Acta de cierre)",
-                            "08. Plan de Trabajo Concertado (Diligenciado y firmado por aprendiz)",
-                            "09. Registro de Asistencia e Inasistencia (Planillas y Sofía Plus)",
+                            "01. Programa Formativo",
+                            "02. Proyecto Formativo (Descargado de Sofía Plus)",
+                            "03. Viabilidad del Proyecto (Descargado de Sofía Plus)",
+                            "04. Planeación Pedagógica (Aprobada por Red)",
+                            "05. Verificación del Ambiente de Formación (Acta y fotos I.E.)",
+                            "06. Guías e Instrumentos de Evaluación",
+                            "07. Cierre de Inducción",
+                            "08. Plan de Trabajo Concertado (Firmado por aprendiz)",
+                            "09. Registro de Asistencia e Inasistencia",
                             "10. Plan de Mejoramiento (Cuando aplique)",
                             "11. Acta de Finalización de la Etapa Lectiva",
-                            "12. Reporte de Juicios Evaluativos (Descargado de Sofía Plus)",
-                            "13. Seguimiento a la Etapa Productiva (Enlace o repositorio)",
+                            "12. Reporte de Juicios Evaluativos",
+                            "13. Seguimiento a la Etapa Productiva",
                             "14. Evaluación del Desarrollo del Proyecto Formativo",
                             "15. Portafolio de Evidencias de los Aprendices",
-                            "Actividades: Diligenciar y cargar las 15 evidencias completas y organizadas.",
-                            "Actividades: Mantener estructura uniforme y nomenclatura de archivos.",
-                            "Actividades: Comprobar legibilidad y vigencia de versiones.",
-                            "Actividades: Actualizar constantemente y verificar que los enlaces compartidos funcionen."
+                            "Diligenciar y cargar las 15 evidencias de forma organizada en Google Drive."
                         ]
                     },
                     {
@@ -479,22 +542,17 @@
                         process: "Verificación Portafolios 2026 (Google Sheets)",
                         platform: "Google Sheets",
                         platformIcon: "fa-chart-pie",
-                        platformColor: "emerald",
                         linkKey: "control_portafolio",
                         defaultLink: "https://docs.google.com/spreadsheets/d/1yT13Qt884rEexxrFw5Aa9NAxckn1H5wHjgjCrBFvySA?usp=drive_fs",
-                        description: "Tablero Control Cuantitativo: Diseñado para supervisar el estado de actualización de los portafolios de los instructores por cada ficha de formación y consolidar el avance general del proceso.",
+                        description: "Tablero Control Cuantitativo: Diseñado para supervisar el estado de actualización de los portafolios de los instructores por cada ficha de formación y consolidar el avance general.",
                         hasList: true,
-                        listType: "control_portafolio_steps",
-                        listTitle: "Actividades a Realizar (Supervisión y Control)",
+                        listTitle: "Actividades a Realizar",
                         listItems: [
-                            "1. Verificar el tablero de control (dashboard) para conocer el estado general de cada ficha.",
-                            "2. Ingresar a la hoja de cada ficha e identificar documentos pendientes o con novedades.",
-                            "3. Actualizar semanalmente la información en el Google Sheets.",
-                            "4. Subir y actualizar periódicamente los documentos del portafolio.",
-                            "5. Verificar que cada evidencia corresponda al programa y esté vigente y legible.",
-                            "6. Registrar y gestionar oportunamente las novedades detectadas.",
-                            "7. Confirmar coincidencia entre el tablero y la documentación almacenada en Drive.",
-                            "8. Mantener actualizado el consolidado general para auditorías."
+                            "Verificar el dashboard general por ficha de formación.",
+                            "Identificar evidencias pendientes o incompletas.",
+                            "Actualizar semanalmente la información en Google Sheets.",
+                            "Verificar que cada evidencia esté vigente y legible.",
+                            "Mantener actualizado el consolidado general para auditorías."
                         ]
                     }
                 ]
@@ -503,6 +561,7 @@
                 id: "mod-3",
                 code: "MÓDULO 3",
                 title: "CONTROL Y REGISTRO DE ASISTENCIA",
+                category: "Asistencia",
                 icon: "fa-clipboard-user",
                 items: [
                     {
@@ -512,21 +571,18 @@
                         process: "Carpeta de Asistencia (Google Drive)",
                         platform: "Google Drive",
                         platformIcon: "fa-folder-open",
-                        platformColor: "blue",
                         linkKey: "asistencia_drive",
                         defaultLink: "https://drive.google.com/open?id=1zWp1UoIXKZfd4AH4wRqnl1GTYBb6eWg5&usp=drive_fs",
-                        description: "Control de Asistencia Unificado: Formato oficial en Google Drive para registrar la asistencia de los aprendices de los grados 10 y 11. Debe ser impreso y firmado en físico en cada sesión de formación.",
+                        description: "Control de Asistencia Unificado: Formato oficial en Google Drive para registrar la asistencia de los aprendices de los grados 10 y 11. Debe ser impreso y firmado en físico en cada sesión.",
                         hasList: true,
-                        listType: "asistencia_steps",
-                        listTitle: "Actividades a Realizar (Registro y Archivo)",
+                        listTitle: "Pasos Operativos de Asistencia",
                         listItems: [
-                            "1. Descargar periódicamente el formato oficial de asistencia desde Google Drive.",
-                            "2. Imprimir el formato y utilizarlo en cada jornada de formación.",
-                            "3. Solicitar la firma física de cada aprendiz como evidencia de participación.",
-                            "4. Verificar que el registro esté completo, legible y correctamente diligenciado.",
-                            "5. Consultar y registrar novedades (retiros, traslados, cambios de ficha).",
-                            "6. Mantener actualizado el control de asistencia conforme a las novedades.",
-                            "7. Archivar los formatos diligenciados en el portafolio del instructor."
+                            "Descargar periódicamente el formato oficial de asistencia desde Google Drive.",
+                            "Imprimir el formato y utilizarlo en cada jornada de formación.",
+                            "Solicitar la firma física de cada aprendiz como evidencia.",
+                            "Verificar que el registro esté completo y legible.",
+                            "Consultar y registrar novedades (retiros, traslados, deserciones).",
+                            "Archivar los formatos diligenciados en el portafolio del instructor."
                         ]
                     }
                 ]
@@ -535,6 +591,7 @@
                 id: "mod-4",
                 code: "MÓDULO 4",
                 title: "SEGUIMIENTO A ETAPA PRODUCTIVA (EP)",
+                category: "Etapa Productiva",
                 icon: "fa-briefcase",
                 items: [
                     {
@@ -544,30 +601,20 @@
                         process: "Soportes EP 2026 (Google Drive)",
                         platform: "Google Drive",
                         platformIcon: "fa-folder-open",
-                        platformColor: "blue",
                         linkKey: "ep2026_drive",
                         defaultLink: "https://drive.google.com/open?id=1P0Xx4S0Mzfry6pcRxeGpxAsVgM-FpQjz&usp=drive_fs",
-                        description: "Repositorio Oficial de la Etapa Productiva 2026 (Grado 11): Espacio institucional en Google Drive destinado a centralizar y custodiar las evidencias documentales organizadas por programa y aprendiz.",
+                        description: "Repositorio Oficial de la Etapa Productiva 2026 (Grado 11): Espacio institucional en Google Drive destinado a centralizar y custodiar las evidencias documentales organizadas por aprendiz.",
                         hasList: true,
-                        listType: "ep2026_structure",
-                        listTitle: "Estructura de Carpetas (00 a 13) & Actividades",
+                        listTitle: "Estructura Carpetas (00 a 13) & Actividades",
                         listItems: [
-                            "00. Actualización de Datos",
-                            "01. Formato F165 Versión 3",
-                            "02. Formato F147 Versión 5",
-                            "03. Formato F023 Versión 5",
-                            "04. Certificación Laboral",
-                            "05. Documento de Identidad",
-                            "06. Certificación de la Agencia Pública de Empleo (APE)",
-                            "07. Bitácora 0 o Proyecto Productivo",
+                            "00. Actualización de Datos | 01. Formato F165 V3",
+                            "02. Formato F147 V5 | 03. Formato F023 V5",
+                            "04. Certificación Laboral | 05. Documento de Identidad",
+                            "06. Certificación APE SENA | 07. Bitácora 0 o Proyecto",
                             "08 a 13. Bitácoras 1 a 6",
-                            "Actividad 1: Verificar que cada aprendiz disponga de la estructura completa de carpetas.",
-                            "Actividad 2: Orientar a aprendices en el cargue respetando nomenclatura.",
-                            "Actividad 3: Comprobar que los archivos estén en PDF y sean legibles.",
-                            "Actividad 4: Verificar diligenciamiento y firmas en formatos oficiales vigentes.",
-                            "Actividad 5: Revisar periódicamente el cargue de bitácoras según cronograma.",
-                            "Actividad 6: Identificar y registrar novedades para su oportuna subsanación.",
-                            "Actividad 7: Confirmar que certificaciones cumplan con los requisitos del SENA."
+                            "Verificar que cada aprendiz disponga de la estructura completa de carpetas.",
+                            "Orientar en el cargue ordenado respetando la nomenclatura.",
+                            "Validar legibilidad y vigencia de las firmas oficiales."
                         ]
                     },
                     {
@@ -577,22 +624,16 @@
                         process: "Verificación EP 2026 (Google Sheets)",
                         platform: "Google Sheets",
                         platformIcon: "fa-list-check",
-                        platformColor: "emerald",
                         linkKey: "ep2026_sheets",
                         defaultLink: "https://docs.google.com/spreadsheets/d/1INv838b_pCy6_lq2jlMJGYKXoKFRxvyj_yhqZzdij3w?usp=drive_fs",
-                        description: "Verificación EP 2026 (Google Sheets): Tablero de control y seguimiento que consolida en tiempo real el avance documental de los aprendices por ficha, porcentaje de cumplimiento y control de fechas.",
+                        description: "Verificación EP 2026: Tablero de control que consolida en tiempo real el avance documental de los aprendices por ficha, porcentaje de cumplimiento y fechas de entrega.",
                         hasList: true,
-                        listType: "ep2026_control_steps",
-                        listTitle: "Actividades a Realizar (Monitoreo y Control)",
+                        listTitle: "Actividades de Monitoreo",
                         listItems: [
-                            "1. Verificar el tablero de control (dashboard) para conocer el estado general de cada ficha.",
-                            "2. Ingresar a la hoja de cada ficha e identificar pendientes o novedades.",
-                            "3. Actualizar semanalmente la información en Google Sheets.",
-                            "4. Solicitar cargue oportuno de soportes según cronograma.",
-                            "5. Verificar legibilidad y cumplimiento de requisitos documentales.",
-                            "6. Registrar y realizar seguimiento a novedades hasta su subsanación.",
-                            "7. Validar coincidencia entre el porcentaje de cumplimiento y los soportes en Drive.",
-                            "8. Mantener actualizado el estado de cada aprendiz para el cierre oportuno de la EP."
+                            "Verificar el dashboard de avance porcentual.",
+                            "Identificar documentos faltantes por aprendiz.",
+                            "Actualizar semanalmente la información en Google Sheets.",
+                            "Validar coincidencia entre el % en el tablero y los archivos en Drive."
                         ]
                     },
                     {
@@ -602,30 +643,18 @@
                         process: "Soportes EP 2027 (Google Drive)",
                         platform: "Google Drive",
                         platformIcon: "fa-folder-open",
-                        platformColor: "blue",
                         linkKey: "ep2027_drive",
                         defaultLink: "https://drive.google.com/open?id=1a6OEiYXxIEseSeUXOypOz-2bk10RAZWJ&usp=drive_fs",
                         description: "Repositorio Oficial de la Etapa Productiva 2027 (Grado 10): Espacio institucional en Google Drive destinado a centralizar, organizar y custodiar las evidencias de grado décimo.",
                         hasList: true,
-                        listType: "ep2027_structure",
-                        listTitle: "Estructura de Carpetas (0 a 14) & Actividades",
+                        listTitle: "Estructura Carpetas (0 a 14)",
                         listItems: [
-                            "0. Documento de Identidad",
-                            "1. Acta de Verificación de Datos",
-                            "2. Formato F165 Versión 3 – Individual",
-                            "3. Anteproyecto Productivo",
-                            "4. Formato F165 Versión 3 – Grupal y Certificación Laboral",
-                            "5. Formato F147 Versión 5",
-                            "6. Formato F023 Versión 6",
-                            "7. Certificado de la Agencia Pública de Empleo (APE SENA)",
-                            "8. Bitácora 0",
-                            "9 a 14. Bitácoras 1 a 6",
-                            "Actividad 1: Verificar la estructura completa de carpetas por aprendiz.",
-                            "Actividad 2: Orientar en el cargue ordenado respetando la nomenclatura.",
-                            "Actividad 3: Validar legibilidad de archivos en PDF.",
-                            "Actividad 4: Verificar versiones vigentes de formatos F165, F147, F023 y sus firmas.",
-                            "Actividad 5: Realizar seguimiento al cargue de bitácoras en fechas establecidas.",
-                            "Actividad 6: Identificar y subsanar documentos faltantes."
+                            "0. Documento Identidad | 1. Acta Verificación Datos",
+                            "2. Formato F165 Individual | 3. Anteproyecto Productivo",
+                            "4. F165 Grupal + Certificación Laboral | 5. Formato F147 V5",
+                            "6. Formato F023 V6 | 7. Certificado APE SENA",
+                            "8. Bitácora 0 | 9 a 14. Bitácoras 1 a 6",
+                            "Asegurar el cargue progresivo según el avance curricular."
                         ]
                     },
                     {
@@ -635,22 +664,15 @@
                         process: "Verificación EP 2027 (Google Sheets)",
                         platform: "Google Sheets",
                         platformIcon: "fa-list-check",
-                        platformColor: "emerald",
                         linkKey: "ep2027_sheets",
                         defaultLink: "https://docs.google.com/spreadsheets/d/17oFYIbdiBulBlCiXs07X2iD75ps9DG71e0y4fhatZUs?usp=drive_fs",
-                        description: "Verificación EP 2027 (Google Sheets): Tablero de control y seguimiento en Google Sheets que consolida en tiempo real el avance documental por ficha y aprendiz.",
+                        description: "Verificación EP 2027: Tablero de control y seguimiento en Google Sheets que consolida en tiempo real el avance documental por ficha y aprendiz.",
                         hasList: true,
-                        listType: "ep2027_control_steps",
-                        listTitle: "Actividades a Realizar (Monitoreo EP 2027)",
+                        listTitle: "Actividades a Realizar",
                         listItems: [
-                            "1. Consultar el dashboard general por ficha.",
-                            "2. Identificar documentos pendientes en hojas específicas.",
-                            "3. Actualizar el tablero semanalmente.",
-                            "4. Solicitar cargue a aprendices según cronograma.",
-                            "5. Validar legibilidad y pertinencia de soportes.",
-                            "6. Registrar y hacer seguimiento a novedades hasta su corrección.",
-                            "7. Verificar coincidencia con los archivos almacenados en Drive.",
-                            "8. Garantizar estado al día para el proceso de certificación."
+                            "Consultar el tablero general de grado décimo.",
+                            "Solicitar cargue oportuno a los aprendices.",
+                            "Hacer seguimiento permanente a novedades."
                         ]
                     }
                 ]
@@ -659,6 +681,7 @@
                 id: "mod-5",
                 code: "MÓDULO 5",
                 title: "GOBERNANZA Y GESTIÓN DE ACTAS",
+                category: "Actas",
                 icon: "fa-gavel",
                 items: [
                     {
@@ -668,35 +691,16 @@
                         process: "Carpeta Actas 2025-2026 (Google Drive)",
                         platform: "Google Drive",
                         platformIcon: "fa-folder-open",
-                        platformColor: "blue",
                         linkKey: "actas_drive",
                         defaultLink: "https://drive.google.com/drive/folders/1l6B410OFDko1Ft3eBTSuQH9nMfDTCaWm?usp=sharing",
-                        description: "Carpeta de Actas 2025–2026: Repositorio institucional para el almacenamiento y custodia de las actas oficiales de reuniones, comités, inducciones, cierres y revisiones técnicas.",
+                        description: "Carpeta de Actas 2025–2026: Repositorio institucional para el almacenamiento y custodia de las actas oficiales de reuniones, comités, inducciones, cierres y revisiones técnicas (Actas 00 a 19).",
                         hasList: true,
-                        listType: "actas_list",
                         listTitle: "Listado de Actas Oficiales & Procedimiento",
                         listItems: [
-                            "Acta_00_Sensibilización_Grado9",
-                            "Acta_01_Apertura_FPI_10G_2025",
-                            "Acta_02_Revision_Tecnica_10G_2025 / GFPI-F-033",
-                            "Acta_03_Apertura_Ficha_10G_2025",
-                            "Acta_04_Induccion_Ficha_10G_2025",
-                            "Acta_05_Plan_Trabajo_10G_2025",
-                            "Acta_06_TP_I_10G_Apertura_FPI_11G_Abril_2025-2026",
-                            "Acta_07-15_TP_II_10G_TP_VII_11G_Junio_2025-2026",
-                            "Acta_08_Etapa_Productiva_10G_2025",
-                            "Acta_09_Verificacion_Datos_10G_2025",
-                            "Acta_10_Evaluacion_Transversales_I_10G_2025",
-                            "Acta_11-16_TP_III_10G_TP_VIII_11G_Sep_2025-2026",
-                            "Acta_12_Evaluacion_Transversales_II_10G_2025",
-                            "Acta_13-18_Cierre_Ficha_10G_2025",
-                            "Acta_14 a 18_Cierres y Transversales 11G 2026",
-                            "Acta_19_Certificacion_11G_2026",
-                            "Actividades: Diligenciar en formato oficial (Material de Apoyo).",
-                            "Actividades: Convocar y socializar acuerdos en reunión con la I.E.",
-                            "Actividades: Recolectar firmas físicas o digitales.",
-                            "Actividades: Escanear en PDF legible y cargar en Drive con nomenclatura.",
-                            "Actividades: Mantener repositorio al día para auditorías."
+                            "Acta 00 Sensibilización | Acta 01 Apertura FPI | Acta 02 Revisión Técnica GFPI-F-033",
+                            "Acta 03 Apertura Ficha | Acta 04 Inducción | Acta 05 Plan Trabajo",
+                            "Acta 06 a 18 Comités Trimestrales & Cierres | Acta 19 Certificación",
+                            "Diligenciar en formato oficial, convocar reunión, firmar, escanear en PDF y subir a Drive."
                         ]
                     },
                     {
@@ -706,22 +710,14 @@
                         process: "Verificación Actas 2025 (Google Sheets)",
                         platform: "Google Sheets",
                         platformIcon: "fa-file-signature",
-                        platformColor: "emerald",
                         linkKey: "actas2025_sheets",
                         defaultLink: "https://docs.google.com/spreadsheets/d/1kYu3yoU05B61LU80bmDh1MM8uJf-yukZRFRWN-vYmFw/edit?usp=sharing",
-                        description: "Verificación de Actas 2025: Hoja de control en Google Sheets diseñada para realizar el seguimiento al estado de las actas y verificación de las firmas correspondientes a la vigencia 2025.",
+                        description: "Verificación de Actas 2025: Hoja de control en Google Sheets diseñada para realizar el seguimiento al estado de las actas y verificación de firmas.",
                         hasList: true,
-                        listType: "actas_2025_steps",
-                        listTitle: "Actividades a Realizar (Verificación 2025)",
+                        listTitle: "Control de Firmas 2025",
                         listItems: [
-                            "1. Verificar el dashboard para conocer el estado por ficha.",
-                            "2. Ingresar a la hoja e identificar la ficha objeto de revisión.",
-                            "3. Confirmar que todas las actas requeridas tengan firmas.",
-                            "4. Identificar actas pendientes y registrar observaciones.",
-                            "5. Actualizar semanalmente la hoja de cálculo.",
-                            "6. Cumplir con el cronograma de verificación institucional.",
-                            "7. Validar coincidencia con las actas cargadas en Google Drive.",
-                            "8. Gestionar la subsanación de novedades encontradas."
+                            "Verificar firmas en actas de cierre 2025.",
+                            "Registrar observaciones sobre actas pendientes."
                         ]
                     },
                     {
@@ -731,22 +727,14 @@
                         process: "Verificación Actas 2026 (Google Sheets)",
                         platform: "Google Sheets",
                         platformIcon: "fa-file-signature",
-                        platformColor: "emerald",
                         linkKey: "actas2026_sheets",
                         defaultLink: "https://docs.google.com/spreadsheets/d/1Gnql6uVrB6NNsD6PzjP65vGADPSKKtyBTz7zuQYRMX0/edit?usp=sharing",
-                        description: "Verificación de Actas 2026: Hoja de control en Google Sheets diseñada para realizar el seguimiento al estado de las actas y verificación de las firmas correspondientes a la vigencia 2026.",
+                        description: "Verificación de Actas 2026: Hoja de control para seguimiento y auditoría de actas vigencia 2026.",
                         hasList: true,
-                        listType: "actas_2026_steps",
-                        listTitle: "Actividades a Realizar (Verificación 2026)",
+                        listTitle: "Control de Firmas 2026",
                         listItems: [
-                            "1. Verificar el dashboard para conocer el estado por ficha.",
-                            "2. Ingresar a la hoja e identificar la ficha objeto de revisión.",
-                            "3. Confirmar que todas las actas requeridas tengan firmas.",
-                            "4. Identificar actas pendientes y registrar observaciones.",
-                            "5. Actualizar semanalmente la hoja de cálculo.",
-                            "6. Cumplir con el cronograma de verificación institucional.",
-                            "7. Validar coincidencia con las actas cargadas en Google Drive.",
-                            "8. Gestionar la subsanación de novedades encontradas."
+                            "Monitorear cumplimiento de actas trimestrales.",
+                            "Garantizar que todas las actas contengan firmas completas."
                         ]
                     }
                 ]
@@ -755,6 +743,7 @@
                 id: "mod-6",
                 code: "MÓDULO 6",
                 title: "CENTRO DE REPORTES",
+                category: "Reportes",
                 icon: "fa-chart-line",
                 items: [
                     {
@@ -764,23 +753,16 @@
                         process: "Listados 2026 (Consolidados / Juicios / Inasistencias)",
                         platform: "SharePoint SENA",
                         platformIcon: "fa-cloud",
-                        platformColor: "purple",
                         linkKey: "reportes_2026",
                         defaultLink: "https://sena4-my.sharepoint.com/:f:/r/personal/cmantillad_sena_edu_co/Documents/2026/Articulacion/listados%202026?csf=1&web=1&e=hTB1Og",
-                        description: "Centro de Consulta y Generación de Reportes: Espacio destinado a la consulta, descarga y seguimiento de la información académica y administrativa de las fichas de formación en articulación.",
+                        description: "Centro de Consulta y Generación de Reportes: Espacio destinado a la consulta, descarga y seguimiento de la información académica y administrativa de las fichas de formación.",
                         hasList: true,
-                        listType: "reportes_list",
-                        listTitle: "Reportes Disponibles & Actividades a Realizar",
+                        listTitle: "Reportes Operativos",
                         listItems: [
-                            "Listado oficial de aprendices por ficha de formación.",
+                            "Listado oficial de aprendices por ficha.",
                             "Reporte de juicios evaluativos (Sofia Plus / Zajuna).",
                             "Consolidado mensual de inasistencias.",
-                            "Información de seguimiento a novedades de matrícula.",
-                            "Actividad 1: Verificar periódicamente información descargada de Sofia Plus.",
-                            "Actividad 2: Comparar reportes con novedades entregadas a Líder Articulación.",
-                            "Actividad 3: Validar que listados correspondan a la realidad académica.",
-                            "Actividad 4: Revisar juicios evaluativos e identificar pendientes.",
-                            "Actividad 5: Analizar inasistencias y hacer seguimiento a faltas recurrentes."
+                            "Comparar reportes con novedades entregadas al Líder de Articulación."
                         ]
                     }
                 ]
@@ -789,6 +771,7 @@
                 id: "mod-7",
                 code: "MÓDULO 7",
                 title: "SENSIBILIZACIÓN 2027 (PORTAL RECURSOS Y DOCS I.E.)",
+                category: "Sensibilización",
                 icon: "fa-users-viewfinder",
                 items: [
                     {
@@ -798,26 +781,16 @@
                         process: "Portal Programas / Video / PPT / Soportes I.E.",
                         platform: "Google Sheets",
                         platformIcon: "fa-photo-film",
-                        platformColor: "amber",
                         linkKey: "sensibilizacion_portal",
                         defaultLink: "https://docs.google.com/spreadsheets/d/15L1yKBylcbZuP4ZJOCbaxcmNwDEG9uXbaO1YtFI3Bks/edit?usp=sharing",
-                        description: "Portal de Oferta Programas 2027: Reúne los recursos y documentos para la sensibilización, promoción e inscripción de estudiantes de Grado 9 a los programas de articulación SENA.",
+                        description: "Portal de Oferta Programas 2027: Reúne los recursos y documentos para la sensibilización, promoción e inscripción de estudiantes de Grado 9.",
                         hasList: true,
-                        listType: "sensibilizacion_components",
-                        listTitle: "Componentes del Portal & Actividades",
+                        listTitle: "Recursos y Tareas de Orientación",
                         listItems: [
-                            "Portal de Programas de Formación (11 programas ofertados).",
-                            "Videos institucionales de promoción y presentaciones PPT oficiales.",
-                            "Formatos base obligatorios para aspirantes y documentos de apoyo.",
-                            "Módulo de recepción y carpetas Drive de soportes I.E.",
-                            "Actividad 1: Revisar portal, videos y PPT previamente.",
-                            "Actividad 2: Presentar la oferta en la I.E. usando el material oficial.",
-                            "Actividad 3: Explicar características y requisitos de cada programa.",
-                            "Actividad 4: Orientar en el diligenciamiento de formatos obligatorios.",
-                            "Actividad 5: Apoyar el registro de estudiantes de grado 9 en Betowa.",
-                            "Actividad 6: Diligenciar formatos de EDT según lineamientos.",
-                            "Actividad 7: Validar que los soportes estén completos, legibles y firmados.",
-                            "Actividad 8: Cargar documentos en el Drive institucional ordenadamente."
+                            "Presentar oferta de 11 programas con video y PPT institucional.",
+                            "Orientar en diligenciamiento de formatos a estudiantes de Grado 9.",
+                            "Apoyar registro de aspirantes en Betowa.",
+                            "Cargar soportes y documentos firmados en Drive."
                         ]
                     }
                 ]
@@ -826,6 +799,7 @@
                 id: "mod-8",
                 code: "MÓDULO 8",
                 title: "DESARROLLO CURRICULAR Y MATERIALES DE FORMACIÓN",
+                category: "Curricular",
                 icon: "fa-book-bookmark",
                 items: [
                     {
@@ -835,25 +809,17 @@
                         process: "Repositorio Documental Curricular 2027",
                         platform: "Google Drive Repositorio",
                         platformIcon: "fa-box-archive",
-                        platformColor: "indigo",
                         linkKey: "desarrollo_curricular",
                         defaultLink: "https://drive.google.com/drive/folders/1EKbg6Zu_nKubPxvEv79pKcH0YVhC8IYy?usp=sharing",
-                        description: "Repositorio Documental Curricular 2027: Carpeta digital organizada por programa de formación para el alistamiento, consolidación y administración de la documentación técnica y pedagógica.",
+                        description: "Repositorio Documental Curricular 2027: Carpeta digital organizada por programa de formación para el alistamiento, consolidación y administración documental.",
                         hasList: true,
-                        listType: "curricular_folders",
-                        listTitle: "Estructura Curricular (01-04) & Actividades",
+                        listTitle: "Subcarpetas Curriculares (01 a 04)",
                         listItems: [
                             "01_Proyecto_Formativo",
                             "02_Planeación_Pedagógica",
                             "03_Guías e Instrumentos de Evaluación",
                             "04_Materiales de Formación",
-                            "Actividad 1: Programar reuniones con Redes de Conocimiento.",
-                            "Actividad 2: Verificar la estructura de carpetas por programa.",
-                            "Actividad 3: Cargar Proyecto, Planeación, Guías y Materiales 2027.",
-                            "Actividad 4: Validar versiones vigentes y legibilidad de archivos.",
-                            "Actividad 5: Gestionar corrección de documentos incompletos.",
-                            "Actividad 6: Mantener repositorio al día previo al inicio de formación.",
-                            "Actividad 7: Verificar permisos de consulta para coordinadores e instructores."
+                            "Coordinar alistamiento previo con Redes de Conocimiento."
                         ]
                     }
                 ]
@@ -861,11 +827,15 @@
         ];
 
         let activeGradeFilter = 'all';
+        let activeCategoryFilter = 'all';
         let searchQuery = '';
         let viewMode = 'cards';
         let customLinks = JSON.parse(localStorage.getItem('sena_custom_links') || '{}');
+        let taskProgress = JSON.parse(localStorage.getItem('sena_task_progress') || '{}');
+        let currentModalItemKey = null;
         const ADMIN_PASSWORD = "sena2026";
 
+        // Initialize Theme Mode
         if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
         } else {
@@ -926,6 +896,7 @@
             setupEventListeners();
             renderModules();
             renderLinkConfigInputs();
+            updateGlobalTaskStats();
         });
 
         function setupEventListeners() {
@@ -994,10 +965,23 @@
             renderModules();
         }
 
+        function setCategoryFilter(cat) {
+            activeCategoryFilter = cat;
+            document.querySelectorAll('.cat-pill-btn').forEach(btn => {
+                if (btn.getAttribute('data-cat') === cat) {
+                    btn.className = 'cat-pill-btn px-2.5 py-1 rounded-md bg-sena-500 text-white font-semibold shrink-0 shadow-sm';
+                } else {
+                    btn.className = 'cat-pill-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 shrink-0';
+                }
+            });
+            renderModules();
+        }
+
         function resetFilters() {
             searchQuery = '';
             document.getElementById('searchInput').value = '';
             setGradeFilter('all');
+            setCategoryFilter('all');
         }
 
         function setViewMode(mode) {
@@ -1022,6 +1006,8 @@
             let totalVisibleItems = 0;
 
             modulesData.forEach(module => {
+                const matchesCategory = activeCategoryFilter === 'all' || module.category === activeCategoryFilter;
+
                 const filteredItems = module.items.filter(item => {
                     const matchesGrade = activeGradeFilter === 'all' || 
                                          item.grade === 'General' || 
@@ -1034,7 +1020,7 @@
                                           item.process.toLowerCase().includes(searchQuery) ||
                                           item.description.toLowerCase().includes(searchQuery);
 
-                    return matchesGrade && matchesSearch;
+                    return matchesGrade && matchesSearch && matchesCategory;
                 });
 
                 if (filteredItems.length > 0) {
@@ -1047,6 +1033,9 @@
                     }
                 }
             });
+
+            const statElem = document.getElementById('statTotalItems');
+            if (statElem) statElem.textContent = `${totalVisibleItems} Visibles`;
 
             if (totalVisibleItems === 0) {
                 emptyState.classList.remove('hidden');
@@ -1064,6 +1053,11 @@
                 const badgeColor = item.grade === 'Grado 10' ? 'bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-400 border-amber-500/20' :
                                    item.grade === 'Grado 11' ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-400 border-blue-500/20' :
                                    'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border-slate-500/20';
+
+                const itemProgressKey = `${module.id}_${item.code}`;
+                const checkedCount = (taskProgress[itemProgressKey] || []).filter(Boolean).length;
+                const totalTasks = item.listItems ? item.listItems.length : 0;
+                const isComplete = totalTasks > 0 && checkedCount === totalTasks;
 
                 return `
                     <div class="p-5 rounded-xl bg-slate-50/70 dark:bg-slate-950/50 border border-slate-200/60 dark:border-slate-800 flex flex-col justify-between hover:border-sena-500/50 transition">
@@ -1086,22 +1080,33 @@
                                 ${item.name}
                             </h4>
 
-                            <p class="text-xs text-slate-500 dark:text-slate-400 mb-3 line-clamp-3">
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mb-3 line-clamp-3 leading-relaxed">
                                 ${item.description}
                             </p>
                         </div>
 
-                        <div class="pt-3 border-t border-slate-200/60 dark:border-slate-800/80 flex items-center justify-between gap-2">
-                            ${item.hasList ? `
-                                <button onclick="openDetailModal('${module.id}', '${item.code}')" class="text-xs font-semibold text-sena-600 dark:text-sena-400 hover:underline flex items-center">
-                                    <i class="fa-solid fa-list-check mr-1.5"></i> Ver Desglose / Tareas
-                                </button>
-                            ` : '<div></div>'}
-                            
-                            <a href="${targetLink}" target="_blank" rel="noopener noreferrer" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-sena-500 hover:bg-sena-600 text-white transition inline-flex items-center shrink-0 shadow-sm shadow-sena-500/20">
-                                <span>Acceder</span>
-                                <i class="fa-solid fa-arrow-up-right-from-square ml-1.5 text-[10px]"></i>
-                            </a>
+                        <div>
+                            ${totalTasks > 0 ? `
+                                <div class="mb-3 p-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 flex items-center justify-between text-[11px]">
+                                    <span class="text-slate-500">Progreso Checklist:</span>
+                                    <span class="font-bold ${isComplete ? 'text-emerald-500' : 'text-sena-600 dark:text-sena-400'}">
+                                        ${checkedCount} / ${totalTasks} (${Math.round((checkedCount / totalTasks) * 100)}%)
+                                    </span>
+                                </div>
+                            ` : ''}
+
+                            <div class="pt-3 border-t border-slate-200/60 dark:border-slate-800/80 flex items-center justify-between gap-2">
+                                ${item.hasList ? `
+                                    <button onclick="openDetailModal('${module.id}', '${item.code}')" class="text-xs font-semibold text-sena-600 dark:text-sena-400 hover:underline flex items-center">
+                                        <i class="fa-solid fa-list-check mr-1.5"></i> Ver Desglose / Tareas
+                                    </button>
+                                ` : '<div></div>'}
+                                
+                                <a href="${targetLink}" target="_blank" rel="noopener noreferrer" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-sena-500 hover:bg-sena-600 text-white transition inline-flex items-center shrink-0 shadow-sm shadow-sena-500/20">
+                                    <span>Acceder</span>
+                                    <i class="fa-solid fa-arrow-up-right-from-square ml-1.5 text-[10px]"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -1191,6 +1196,7 @@
             return wrapper;
         }
 
+        // Modal Handlers and Interactive Progress Tracker
         function openModal(modalId) {
             document.getElementById(modalId).classList.remove('hidden');
             document.body.style.overflow = 'hidden';
@@ -1207,26 +1213,48 @@
             const item = module.items.find(i => i.code === itemCode);
             if (!item) return;
 
+            currentModalItemKey = `${moduleId}_${itemCode}`;
+
             document.getElementById('modalCodeBadge').textContent = `${module.code} • ${item.code}`;
             document.getElementById('modalTitle').textContent = item.name;
 
+            renderInteractiveChecklist(module, item);
+            openModal('detailModal');
+        }
+
+        function renderInteractiveChecklist(module, item) {
             const modalBody = document.getElementById('modalBody');
-            
+            const itemKey = `${module.id}_${item.code}`;
+            const savedStates = taskProgress[itemKey] || [];
+
             let listHtml = '';
             if (item.hasList && item.listItems) {
+                const total = item.listItems.length;
+                const checked = savedStates.filter(Boolean).length;
+                const pct = Math.round((checked / total) * 100);
+
                 listHtml = `
                     <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 space-y-3">
                         <div class="flex items-center justify-between border-b border-slate-200/60 dark:border-slate-800 pb-2">
                             <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">${item.listTitle || 'Desglose Requerido & Actividades'}</h4>
-                            <span class="text-[11px] font-semibold text-sena-600 dark:text-sena-400">${item.listItems.length} ítems</span>
+                            <span class="text-[11px] font-bold text-sena-600 dark:text-sena-400" id="modalProgressText">${checked} de ${total} completadas (${pct}%)</span>
                         </div>
+
+                        <!-- Progress bar -->
+                        <div class="w-full bg-slate-200 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
+                            <div id="modalProgressBar" class="bg-sena-500 h-full transition-all duration-300" style="width: ${pct}%"></div>
+                        </div>
+
                         <ul class="space-y-2 max-h-[35vh] overflow-y-auto custom-scrollbar pr-1">
-                            ${item.listItems.map(listItem => `
-                                <li class="text-xs text-slate-700 dark:text-slate-300 flex items-start space-x-2">
-                                    <i class="fa-solid fa-circle-check text-sena-500 mt-0.5 shrink-0"></i>
-                                    <span>${listItem}</span>
-                                </li>
-                            `).join('')}
+                            ${item.listItems.map((listItem, idx) => {
+                                const isChecked = savedStates[idx] || false;
+                                return `
+                                    <li class="text-xs text-slate-700 dark:text-slate-300 flex items-start space-x-2.5 p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-900/60 transition cursor-pointer" onclick="toggleTaskCheckbox('${itemKey}', ${idx})">
+                                        <input type="checkbox" ${isChecked ? 'checked' : ''} onclick="event.stopPropagation(); toggleTaskCheckbox('${itemKey}', ${idx})" class="mt-0.5 rounded border-slate-300 text-sena-500 focus:ring-sena-500 h-4 w-4 shrink-0 accent-sena-500">
+                                        <span class="${isChecked ? 'line-through text-slate-400 dark:text-slate-500' : ''}">${listItem}</span>
+                                    </li>
+                                `;
+                            }).join('')}
                         </ul>
                     </div>
                 `;
@@ -1253,10 +1281,55 @@
                     ${listHtml}
                 </div>
             `;
-
-            openModal('detailModal');
         }
 
+        function toggleTaskCheckbox(itemKey, taskIndex) {
+            if (!taskProgress[itemKey]) {
+                taskProgress[itemKey] = [];
+            }
+            taskProgress[itemKey][taskIndex] = !taskProgress[itemKey][taskIndex];
+            localStorage.setItem('sena_task_progress', JSON.stringify(taskProgress));
+
+            // Refresh Current Modal view
+            const parts = itemKey.split('_');
+            const module = modulesData.find(m => m.id === parts[0]);
+            if (module) {
+                const item = module.items.find(i => i.code === parts[1]);
+                if (item) renderInteractiveChecklist(module, item);
+            }
+
+            renderModules();
+            updateGlobalTaskStats();
+        }
+
+        function resetTaskProgressForCurrentItem() {
+            if (!currentModalItemKey) return;
+            delete taskProgress[currentModalItemKey];
+            localStorage.setItem('sena_task_progress', JSON.stringify(taskProgress));
+
+            const parts = currentModalItemKey.split('_');
+            const module = modulesData.find(m => m.id === parts[0]);
+            if (module) {
+                const item = module.items.find(i => i.code === parts[1]);
+                if (item) renderInteractiveChecklist(module, item);
+            }
+
+            renderModules();
+            updateGlobalTaskStats();
+        }
+
+        function updateGlobalTaskStats() {
+            let totalChecked = 0;
+            Object.values(taskProgress).forEach(arr => {
+                if (Array.isArray(arr)) {
+                    totalChecked += arr.filter(Boolean).length;
+                }
+            });
+            const statElem = document.getElementById('statCheckedItems');
+            if (statElem) statElem.textContent = `${totalChecked} Completadas`;
+        }
+
+        // Link Configurator Input Populator
         function renderLinkConfigInputs() {
             const container = document.getElementById('linkInputsContainer');
             if (!container) return;
@@ -1305,17 +1378,20 @@
             closeModal('linkConfigModal');
         }
 
-        // Expose Functions to Window Object for Global Handler Access
+        // Global Event Window Exports
         window.openAdminAuthModal = openAdminAuthModal;
         window.verifyAdminPassword = verifyAdminPassword;
         window.openModal = openModal;
         window.closeModal = closeModal;
         window.openDetailModal = openDetailModal;
         window.setGradeFilter = setGradeFilter;
+        window.setCategoryFilter = setCategoryFilter;
         window.resetFilters = resetFilters;
         window.setViewMode = setViewMode;
         window.saveCustomLinks = saveCustomLinks;
         window.resetCustomLinks = resetCustomLinks;
+        window.toggleTaskCheckbox = toggleTaskCheckbox;
+        window.resetTaskProgressForCurrentItem = resetTaskProgressForCurrentItem;
     </script>
 </body>
 </html>
